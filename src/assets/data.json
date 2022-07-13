@@ -1,11 +1,18 @@
 [
     {
-        "name": "",
+        "itemName": "",
         "level": 0,
         "category": "",
         "profession": "",
         "sells": [
-            
+            {
+                "purchasePrice": 0,
+                "sellingPrice": 0,
+                "profit": 0,
+                "sold": false,
+                "margin": 0.0,
+                "comments": ""
+            }
         ]
     }
 ]
