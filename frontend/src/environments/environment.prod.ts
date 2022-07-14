@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  url: './src/assets/data.json'
+  url: 'https://localhost:7213/api'
 };

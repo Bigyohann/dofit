@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  url: '/assets/data.json'
+  url: 'https://localhost:7213/api'
 };
 
 /*

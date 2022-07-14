@@ -7,6 +7,8 @@ import { tap } from 'rxjs/operators';
 import { ItemStore } from '../store/item/item.store';
 import { Sell } from '../models/sell';
 
+let URL = `${environment.url}/items`
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,7 +22,7 @@ export class ItemService {
   init(): void {
     this.itemStore.set('items', []);
     this.http
-      .get<Item[]>(environment.url)
+      .get<Item[]>(URL)
       .pipe(
         tap((data: Item[]) => this.itemStore.set('items', data))
       )
