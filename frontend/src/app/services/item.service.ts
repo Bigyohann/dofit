@@ -30,10 +30,21 @@ export class ItemService {
   }
 
   generateSellsFromItems(items: Item[]): Sell[] {
+    // return items.reduce((acc: Sell[], item: Item) => {
+    //   let sells = item.sells;
+    //   sells?.forEach(sell => {
+    //     sell.itemName = item.itemName;
+    //     acc.push(sell);
+    //   });
+    //   return acc;
+    // }, [] as Sell[]);
     return items.reduce((acc: Sell[], item: Item) => {
       let sells = item.sells;
       sells?.forEach(sell => {
-        sell.itemName = item.itemName;
+        let formatedItem = {...item};
+        formatedItem.sells = [];
+        sell.item = formatedItem;
+        
         acc.push(sell);
       });
       return acc;

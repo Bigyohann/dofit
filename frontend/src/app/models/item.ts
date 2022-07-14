@@ -4,8 +4,8 @@ export interface Item {
     id: string;
     itemName: string;
     level: number;
-    category: Category;
-    profession: Profession;
+    category: string;
+    profession: string;
     sells?: Sell[];
 }
 
