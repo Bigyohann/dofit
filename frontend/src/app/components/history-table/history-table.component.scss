@@ -1,0 +1,32 @@
+h3 {
+    margin-bottom: .5rem;
+}
+
+.sells-table {
+    width: 100%;
+    padding: 0 2rem;
+
+    .mat-column-name {
+        text-align: left;
+    }
+
+    .mat-column-purchase-price {
+        text-align: right;
+    }
+
+    .mat-column-selling-price {
+        text-align: right;
+    }
+
+    .mat-column-profit {
+        text-align: right;
+    }
+
+    .mat-column-margin {
+        text-align: right;
+    }
+
+    .mat-column-sold {
+        text-align: right;
+    }
+}

@@ -1,0 +1,42 @@
+<h3>Historique des ventes :</h3>
+<table mat-table class="sells-table" [dataSource]="sells">
+
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Nom </th>
+        <td mat-cell *matCellDef="let sell"> {{sell.itemName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="purchase-price">
+        <th mat-header-cell *matHeaderCellDef> Prix d'achat / craft (k)</th>
+        <td mat-cell *matCellDef="let sell"> {{sell.purchasePrice || 0}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="selling-price">
+        <th mat-header-cell *matHeaderCellDef> Prix de vente (k)</th>
+        <td mat-cell *matCellDef="let sell"> {{sell.sellingPrice || 0}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="profit">
+        <th mat-header-cell *matHeaderCellDef> Bénéfice (k)</th>
+        <td mat-cell *matCellDef="let sell"> {{sell.profit || 0}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="margin">
+        <th mat-header-cell *matHeaderCellDef> Taux de marge (%)</th>
+        <td mat-cell *matCellDef="let sell"> {{sell.margin || 0}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="sold">
+        <th mat-header-cell *matHeaderCellDef> Vendu ?</th>
+        <td mat-cell *matCellDef="let sell">
+            <mat-icon *ngIf="sell.sold; else notSold" aria-hidden="false" aria-label="Sold">check</mat-icon>
+            <ng-template #notSold>
+                <mat-icon aria-hidden="false" aria-label="Not sold">close</mat-icon>
+            </ng-template>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
+</table>
+

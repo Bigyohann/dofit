@@ -1,4 +1,5 @@
 export interface Sell {
+    itemName?: string;
     purchasePrice: number;
     sellingPrice: number;
     profit: number;

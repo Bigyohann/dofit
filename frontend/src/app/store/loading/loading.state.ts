@@ -4,4 +4,4 @@ export interface LoadingState extends State {
   loading: boolean;
 }
 
-export const INITIAL_LOADING_STATE: LoadingState = { loading: true };
+export const INITIAL_LOADING_STATE: LoadingState = { loading: false };

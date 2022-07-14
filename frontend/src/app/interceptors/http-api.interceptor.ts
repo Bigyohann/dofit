@@ -20,7 +20,7 @@ import {
     ): Observable<HttpEvent<any>> {
       return next.handle(req).pipe(
         tap(_ => this.store.set('loading', true)),
-        finalize(() => this.store.set('loading', true))
+        finalize(() => this.store.set('loading', false))
       );
     }
   }
