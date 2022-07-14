@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32126.317
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DofitAPI", "DofitAPI\DofitAPI.csproj", "{AF7F5A3C-7B06-467C-8ED1-06E77622933A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF7F5A3C-7B06-467C-8ED1-06E77622933A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF7F5A3C-7B06-467C-8ED1-06E77622933A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF7F5A3C-7B06-467C-8ED1-06E77622933A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF7F5A3C-7B06-467C-8ED1-06E77622933A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ED79BB7D-7553-4E6E-8434-67A2395A29F0}
+	EndGlobalSection
+EndGlobal
