@@ -3,15 +3,15 @@
     <form [formGroup]="sellForm" class="sell-form">
         <mat-grid-list cols="2" rowHeight="3:1">
             <mat-grid-tile>
-                <mat-form-field class="example-full-width" appearance="fill">
-                    <mat-label>Item</mat-label>
+                <mat-form-field appearance="fill">
+                    <mat-label>Objet</mat-label>
                     <input type="text"
                     placeholder="Choisir un item"
                     aria-label="Item"
                     matInput
                     formControlName="item"
-                    [matAutocomplete]="auto">
-                    <mat-autocomplete #auto="matAutocomplete">
+                    [matAutocomplete]="item">
+                    <mat-autocomplete #item="matAutocomplete">
                         <mat-option *ngFor="let item of filteredItems | async" [value]="item">
                             {{item}}
                         </mat-option>
@@ -19,13 +19,57 @@
                 </mat-form-field>
             </mat-grid-tile>
             <mat-grid-tile>
-                <mat-form-field appearance="fill">
-                    <mat-label>Commentaires</mat-label>
-                    <textarea matInput formControlName="comments"
-                                cdkTextareaAutosize
-                                #autosize="cdkTextareaAutosize"
-                                cdkAutosizeMinRows="1"
-                                cdkAutosizeMaxRows="4"></textarea>
+                <mat-form-field [appearance]="itemAlreadyExists ? 'legacy' : 'fill'">
+                    <mat-label>Niveau</mat-label>
+                    <input type="number"
+                    placeholder="Niveau de l'objet"
+                    aria-label="Level"
+                    matInput
+                    formControlName="level"
+                    [readonly]="itemAlreadyExists">
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field [appearance]="itemAlreadyExists ? 'legacy' : 'fill'">
+                    <mat-label>Métier</mat-label>
+                    <input *ngIf="itemAlreadyExists" 
+                            type="text"
+                            placeholder="Métier de l'objet"
+                            aria-label="Profession"
+                            matInput
+                            formControlName="profession"
+                            [readonly]="true">
+                    <mat-select *ngIf="!itemAlreadyExists"
+                                type="text"
+                                placeholder="Métier de l'objet"
+                                aria-label="Profession"
+                                matInput
+                                formControlName="profession">
+                        <mat-option *ngFor="let profession of professions | keyvalue" [value]="profession.value">
+                            {{profession.value}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field [appearance]="itemAlreadyExists ? 'legacy' : 'fill'">
+                    <mat-label>Catégorie</mat-label>
+                    <input *ngIf="itemAlreadyExists" 
+                        type="text"
+                        placeholder="Catégorie de l'objet"
+                        aria-label="Category"
+                        matInput
+                        formControlName="category"
+                        [readonly]="true">
+                    <mat-select *ngIf="!itemAlreadyExists" type="text"
+                                placeholder="Catégorie de l'objet"
+                                aria-label="Category"
+                                matInput
+                                formControlName="category">
+                        <mat-option *ngFor="let category of categories | keyvalue" [value]="category.value">
+                            {{category.value}}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
             </mat-grid-tile>
             <mat-grid-tile>
@@ -38,6 +82,16 @@
                 <mat-form-field appearance="fill">
                     <mat-label>Prix de vente</mat-label>
                     <input matInput type="number" aria-label="selling-price" formControlName="sellingPrice">
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="fill">
+                    <mat-label>Commentaires</mat-label>
+                    <textarea matInput formControlName="comments"
+                                cdkTextareaAutosize
+                                #autosize="cdkTextareaAutosize"
+                                cdkAutosizeMinRows="1"
+                                cdkAutosizeMaxRows="4"></textarea>
                 </mat-form-field>
             </mat-grid-tile>
             <mat-grid-tile>

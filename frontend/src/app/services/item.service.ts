@@ -42,6 +42,19 @@ export class ItemService {
     });
   }
 
+  addItem(item : Item) : void {
+    this.http
+      .post<Item>(URL, item)
+      .subscribe({
+        next: _ => {
+            this.init();
+        },
+        error: error => {
+            console.error('Impossible d\'ajouter l\'item!', error, item);
+        }
+    });
+  }
+
   generateSellsFromItems(items: Item[]): Sell[] {
     return items.reduce((acc: Sell[], item: Item) => {
       let sells = item.sells;

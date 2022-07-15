@@ -29,6 +29,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatDialogModule,
     MatAutocompleteModule,
     MatCheckboxModule,
-    MatGridListModule
+    MatGridListModule,
+    MatSelectModule
   ],
   providers: [
     LoadingStore,

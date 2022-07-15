@@ -8,6 +8,7 @@ import { Sell } from 'src/app/models/sell';
 import { ItemService } from 'src/app/services/item.service';
 import { SellDialogComponent } from '../sell-dialog/sell-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { filter } from 'rxjs/operators'
 
 @Component({
   selector: 'app-history-table',
@@ -51,9 +52,7 @@ export class HistoryTableComponent implements OnInit, OnChanges {
   
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    
-    console.log('filter', filterValue.trim().toLowerCase())
+    this.dataSource.filter = filterValue.toLowerCase();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -76,7 +75,7 @@ export class HistoryTableComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.dataSource.filterPredicate = (sell: Sell, filter) => {
-      return sell.item?.itemName.includes(filter) || false;
+      return sell.item?.itemName.toLowerCase().includes(filter) || false;
    }
   }
 
@@ -86,31 +85,41 @@ export class HistoryTableComponent implements OnInit, OnChanges {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().pipe(filter(res => !!res)).subscribe((result) => {
       console.log('The dialog was closed. Results : ', result);
       let item: Item | undefined = this.items.find(item => item.itemName === result?.item);
       console.log("item found to patch", item)
+
+      const sold = result.sold
+      const comments = result.comments
+      const purchasePrice = result.purchasePrice; 
+      const sellingPrice = result.sellingPrice; 
+      const profit = sellingPrice - purchasePrice;
+      let margin = profit / purchasePrice * 100;
+      margin = Math.round((margin + Number.EPSILON) * 100) / 100;
+      let sell = {
+        margin,
+        profit,
+        purchasePrice,
+        sellingPrice,
+        sold,
+        comments
+      } as Sell;
+
       if (item) {
-        const sold = result.sold
-        const comments = result.comments
-        const purchasePrice = result.purchasePrice; 
-        const sellingPrice = result.sellingPrice; 
-        const profit = sellingPrice - purchasePrice;
-        let margin = profit / purchasePrice * 100;
-        margin = Math.round((margin + Number.EPSILON) * 100) / 100;
-        item.sells?.push({
-          margin,
-          profit,
-          purchasePrice,
-          sellingPrice,
-          sold,
-          comments
-        } as Sell)
-
-        console.log("item to be updated : ", item)
+        item.sells?.push(sell);
         this.itemService.updateItem(item); 
-
-      } 
+      } else {
+        let item: Item = {
+          itemName: result.item,
+          category: result.category,
+          profession: result.profession,
+          level: result.level,
+          sells: [] 
+        };
+        item.sells?.push(sell);
+        this.itemService.addItem(item);
+      }
     });
   }
 
