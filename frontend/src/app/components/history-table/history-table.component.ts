@@ -6,6 +6,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Item } from 'src/app/models/item';
 import { Sell } from 'src/app/models/sell';
 import { ItemService } from 'src/app/services/item.service';
+import { SellDialogComponent } from '../sell-dialog/sell-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-history-table',
@@ -36,8 +38,10 @@ export class HistoryTableComponent implements OnInit, OnChanges {
 
   expandedElement: Sell | null = null;
 
-  constructor(private itemService: ItemService) {
-  }
+  constructor(
+    private itemService: ItemService,
+    public dialog: MatDialog
+  ) { }
 
   numberWithSpaces(number : number) : String{
     var parts = number.toString().split(".");
@@ -74,6 +78,40 @@ export class HistoryTableComponent implements OnInit, OnChanges {
     this.dataSource.filterPredicate = (sell: Sell, filter) => {
       return sell.item?.itemName.includes(filter) || false;
    }
+  }
+
+  openAddSellDialog(): void {
+    const dialogRef = this.dialog.open(SellDialogComponent, {
+      width: '500px',
+      data: {},
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed. Results : ', result);
+      let item: Item | undefined = this.items.find(item => item.itemName === result?.item);
+      console.log("item found to patch", item)
+      if (item) {
+        const sold = result.sold
+        const comments = result.comments
+        const purchasePrice = result.purchasePrice; 
+        const sellingPrice = result.sellingPrice; 
+        const profit = sellingPrice - purchasePrice;
+        let margin = profit / purchasePrice * 100;
+        margin = Math.round((margin + Number.EPSILON) * 100) / 100;
+        item.sells?.push({
+          margin,
+          profit,
+          purchasePrice,
+          sellingPrice,
+          sold,
+          comments
+        } as Sell)
+
+        console.log("item to be updated : ", item)
+        this.itemService.updateItem(item); 
+
+      } 
+    });
   }
 
 }

@@ -29,15 +29,20 @@ export class ItemService {
       .subscribe();
   }
 
+  updateItem(item : Item) : void {
+    this.http
+      .put<Item>(URL + '/' + item.id, item)
+      .subscribe({
+        next: _ => {
+            this.init();
+        },
+        error: error => {
+            console.error('Impossible de mettre à jour l\'item!', error, item);
+        }
+    });
+  }
+
   generateSellsFromItems(items: Item[]): Sell[] {
-    // return items.reduce((acc: Sell[], item: Item) => {
-    //   let sells = item.sells;
-    //   sells?.forEach(sell => {
-    //     sell.itemName = item.itemName;
-    //     acc.push(sell);
-    //   });
-    //   return acc;
-    // }, [] as Sell[]);
     return items.reduce((acc: Sell[], item: Item) => {
       let sells = item.sells;
       sells?.forEach(sell => {
@@ -49,5 +54,9 @@ export class ItemService {
       });
       return acc;
     }, [] as Sell[]);
+  }
+
+  getAllItemsNames() : String[] {
+    return this.itemStore.get('items').map(item => item.itemName);
   }
 }

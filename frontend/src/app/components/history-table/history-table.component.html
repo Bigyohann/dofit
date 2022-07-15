@@ -1,9 +1,15 @@
 <h3>Historique des ventes :</h3>
 
-<mat-form-field appearance="standard">
-    <mat-label>Recherche</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Cape de ..." #input>
-</mat-form-field>
+<div class="table-filter-container">
+    <mat-form-field appearance="standard">
+        <mat-label>Recherche</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Cape de ..." #input>
+    </mat-form-field>
+    <button mat-raised-button color="primary" class="add-sell-button" (click)="openAddSellDialog()">
+        Ajouter une vente
+        <mat-icon>add</mat-icon>
+    </button>
+</div>
 <div class="mat-elevation-z4">
     <table mat-table class="sells-table" matSort multiTemplateDataRows [dataSource]="dataSource">
         <ng-container matColumnDef="name">
@@ -57,7 +63,7 @@
                 <div class="element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
                     <div class="element-comment-container">
                         <div>Commentaire : </div>
-                        <div class="element-comments"> {{element.comments}} </div>
+                        <div class="element-comments"> {{element.comments || 'Aucun commentaire'}} </div>
                     </div>
                     <div class="element-category-container">
                         <div>Catégorie : </div>

@@ -1,0 +1,57 @@
+<h1 mat-dialog-title>Ajouter une vente</h1>
+<mat-dialog-content>
+    <form [formGroup]="sellForm" class="sell-form">
+        <mat-grid-list cols="2" rowHeight="3:1">
+            <mat-grid-tile>
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Item</mat-label>
+                    <input type="text"
+                    placeholder="Choisir un item"
+                    aria-label="Item"
+                    matInput
+                    formControlName="item"
+                    [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let item of filteredItems | async" [value]="item">
+                            {{item}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="fill">
+                    <mat-label>Commentaires</mat-label>
+                    <textarea matInput formControlName="comments"
+                                cdkTextareaAutosize
+                                #autosize="cdkTextareaAutosize"
+                                cdkAutosizeMinRows="1"
+                                cdkAutosizeMaxRows="4"></textarea>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="fill">
+                    <mat-label>Prix d'achat / craft</mat-label>
+                    <input matInput type="number" aria-label="purchase-price" formControlName="purchasePrice">
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="fill">
+                    <mat-label>Prix de vente</mat-label>
+                    <input matInput type="number" aria-label="selling-price" formControlName="sellingPrice">
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-checkbox
+                    color="primary"
+                    formControlName="sold"
+                    labelPosition="before">
+                    Vendu ?
+                </mat-checkbox>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">Annuler</button>
+  <button mat-raised-button color="primary" [disabled]="sellForm.status != 'VALID'" [mat-dialog-close]="sellForm.value" cdkFocusInitial>Ajouter</button>
+</mat-dialog-actions>
