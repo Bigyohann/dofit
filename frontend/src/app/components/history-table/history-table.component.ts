@@ -62,21 +62,23 @@ export class HistoryTableComponent implements OnInit, OnChanges {
       console.log(this.sells);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-      this.dataSource.sortingDataAccessor = (row:Sell, columnName:string) : string => {
-        console.log(row, columnName);
+      this.dataSource.sortingDataAccessor = (row:Sell, columnName:string) : string | number => {
         if (columnName == "name") return row.item?.itemName || "";
-        if (columnName == "purchase-price") return row.purchasePrice.toString();
-        if (columnName == "selling-price") return row.sellingPrice.toString();
+        if (columnName == "purchase-price") return row.purchasePrice;
+        if (columnName == "selling-price") return row.sellingPrice;
         var columnValue = row[columnName as keyof Sell] as string;
         return columnValue;
+      }
+      this.dataSource.filterPredicate = (sell, filter) => {
+        return (sell.item?.itemName.toLowerCase().includes(filter) || false)
+        || (sell.item?.profession.toLowerCase().includes(filter) || false)
+        || (sell.item?.category.toLowerCase().includes(filter) || false)
+        || (sell.comments?.toLowerCase().includes(filter) || false);
       }
     }
   }
 
   ngOnInit(): void {
-    this.dataSource.filterPredicate = (sell: Sell, filter) => {
-      return sell.item?.itemName.toLowerCase().includes(filter) || false;
-   }
   }
 
   openAddSellDialog(): void {
@@ -86,9 +88,7 @@ export class HistoryTableComponent implements OnInit, OnChanges {
     });
 
     dialogRef.afterClosed().pipe(filter(res => !!res)).subscribe((result) => {
-      console.log('The dialog was closed. Results : ', result);
       let item: Item | undefined = this.items.find(item => item.itemName === result?.item);
-      console.log("item found to patch", item)
 
       const sold = result.sold
       const comments = result.comments
