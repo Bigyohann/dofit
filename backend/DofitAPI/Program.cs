@@ -10,9 +10,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.Configure<DofitDatabaseSettings>(
-builder.Configuration.GetSection("DofitDatabase"));
+builder.Services.Configure<DofitDatabaseSettings>(builder.Configuration.GetSection("DofitDatabase"));
 builder.Services.AddSingleton<ItemsService>();
+builder.Services.AddSingleton<SellsService>();
 
 //services cors
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>

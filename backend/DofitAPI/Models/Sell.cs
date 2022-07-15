@@ -1,9 +1,18 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace DofitAPI.Models
 {
     public class Sell
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; }
+
+        [BsonElement("Item_id")]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? Item_id { get; set; }
+
         [BsonElement("PurchasePrice")]
         public int PurchasePrice { get; set; }
 
