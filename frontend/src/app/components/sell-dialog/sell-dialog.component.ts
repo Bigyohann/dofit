@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ItemService } from 'src/app/services/item.service';
 import { Validators } from '@angular/forms';
-import { Category, Item, Profession } from 'src/app/models/item';
+import { Category, Item, Profession, ProfessionAndCategoryMap } from 'src/app/models/item';
 import { ItemStore } from 'src/app/store/item/item.store';
 
 @Component({
@@ -32,6 +32,10 @@ export class SellDialogComponent implements OnInit {
 
   professions = Profession;
   categories = Category;
+  professionAndCategoryMap = ProfessionAndCategoryMap;
+
+  filteredProfessions = Object.values(this.professions);
+  filteredCategories = Object.values(this.categories);
 
   itemAlreadyExists : boolean = true;
 
@@ -54,6 +58,12 @@ export class SellDialogComponent implements OnInit {
         this.sellForm.get('level')?.setValue('');
         this.sellForm.get('category')?.setValue('');
         this.sellForm.get('profession')?.setValue('');
+      }
+    });
+    this.sellForm.get("category")?.valueChanges.subscribe(selectedCategory => {
+      if (selectedCategory) {
+        let profession = Array.from(this.professionAndCategoryMap.keys()).find(key => this.professionAndCategoryMap.get(key)?.includes(selectedCategory));
+        if (profession) this.sellForm.get('profession')?.setValue(profession);
       }
     });
   }

@@ -31,6 +31,27 @@
             </mat-grid-tile>
             <mat-grid-tile>
                 <mat-form-field [appearance]="itemAlreadyExists ? 'legacy' : 'fill'">
+                    <mat-label>Catégorie</mat-label>
+                    <input *ngIf="itemAlreadyExists" 
+                        type="text"
+                        placeholder="Catégorie de l'objet"
+                        aria-label="Category"
+                        matInput
+                        formControlName="category"
+                        [readonly]="true">
+                    <mat-select *ngIf="!itemAlreadyExists" type="text"
+                                placeholder="Catégorie de l'objet"
+                                aria-label="Category"
+                                matInput
+                                formControlName="category">
+                        <mat-option *ngFor="let category of filteredCategories | keyvalue" [value]="category.value">
+                            {{category.value}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field [appearance]="itemAlreadyExists ? 'legacy' : 'fill'">
                     <mat-label>Métier</mat-label>
                     <input *ngIf="itemAlreadyExists" 
                             type="text"
@@ -45,29 +66,8 @@
                                 aria-label="Profession"
                                 matInput
                                 formControlName="profession">
-                        <mat-option *ngFor="let profession of professions | keyvalue" [value]="profession.value">
+                        <mat-option *ngFor="let profession of filteredProfessions | keyvalue" [value]="profession.value">
                             {{profession.value}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </mat-grid-tile>
-            <mat-grid-tile>
-                <mat-form-field [appearance]="itemAlreadyExists ? 'legacy' : 'fill'">
-                    <mat-label>Catégorie</mat-label>
-                    <input *ngIf="itemAlreadyExists" 
-                        type="text"
-                        placeholder="Catégorie de l'objet"
-                        aria-label="Category"
-                        matInput
-                        formControlName="category"
-                        [readonly]="true">
-                    <mat-select *ngIf="!itemAlreadyExists" type="text"
-                                placeholder="Catégorie de l'objet"
-                                aria-label="Category"
-                                matInput
-                                formControlName="category">
-                        <mat-option *ngFor="let category of categories | keyvalue" [value]="category.value">
-                            {{category.value}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
