@@ -1,0 +1,42 @@
+[
+    {
+        "itemName": "Justobottes",
+        "level": 59,
+        "category": "Bottes",
+        "profession": "Cordonnier",
+        "sells": [
+            {
+                "purchasePrice": 15000,
+                "sellingPrice": 450000,
+                "profit": 435000,
+                "sold": true,
+                "margin": 2900.00,
+                "comments": "du lourd le jet"
+            },
+            {
+                "purchasePrice": 15000,
+                "sellingPrice": 250000,
+                "profit": 235000,
+                "sold": false,
+                "margin": 1566.67,
+                "comments": "du moins lourd le jet"
+            }
+        ]
+    },
+    {
+        "itemName": "Cape de Jules Yanos",
+        "level": 59,
+        "category": "Cape",
+        "profession": "Tailleur",
+        "sells": [
+            {
+                "purchasePrice": 50000,
+                "sellingPrice": 250000,
+                "profit": 200000,
+                "sold": true,
+                "margin": 400,
+                "comments": "pire jet"
+            }
+        ]
+    }
+]
