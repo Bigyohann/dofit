@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, HostListener, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { filter } from 'rxjs/operators'
 import { SellService } from 'src/app/services/sell.service';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-history-table',
@@ -24,7 +25,7 @@ import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component'
     ]),
   ],
 })
-export class HistoryTableComponent implements OnInit, OnChanges {
+export class HistoryTableComponent implements OnInit, AfterContentInit, OnChanges {
 
   @Input()
   items!: Item[] | null;
@@ -46,10 +47,13 @@ export class HistoryTableComponent implements OnInit, OnChanges {
   hoverEdit = false;
   hoverDelete = false;
 
+  displayMode: 'mobile' | 'desktop' = 'desktop';
+
   constructor(
     private itemService: ItemService,
     private sellService: SellService,
     public dialog: MatDialog,
+    private observer: BreakpointObserver
   ) {}
 
   numberWithSpaces(number : number) : String{
@@ -87,6 +91,16 @@ export class HistoryTableComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+  }
+
+  ngAfterContentInit() {
+    this.observer.observe(['(max-width: 620px)']).subscribe((res) => {
+      if (res.matches) {
+        this.displayMode = 'mobile'
+      } else {
+        this.displayMode = 'desktop';
+      }
+    });
   }
 
   openAddSellDialog(): void {

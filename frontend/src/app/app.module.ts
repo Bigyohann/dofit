@@ -19,6 +19,7 @@ import { HistoryComponent } from './pages/history/history.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { HistoryTableComponent } from './components/history-table/history-table.component';
 import { SellDialogComponent } from './components/sell-dialog/sell-dialog.component';
+import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
@@ -32,7 +33,10 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSelectModule } from '@angular/material/select';
-import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +46,7 @@ import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.
     HistoryTableComponent,
     SellDialogComponent,
     DeleteDialogComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,7 +66,10 @@ import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.
     MatAutocompleteModule,
     MatCheckboxModule,
     MatGridListModule,
-    MatSelectModule
+    MatSelectModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatListModule,
   ],
   providers: [
     LoadingStore,

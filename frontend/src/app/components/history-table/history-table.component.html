@@ -14,55 +14,87 @@
     <table mat-table class="sells-table" matSort multiTemplateDataRows [dataSource]="dataSource">
         <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Trier par nom"> Nom </th>
-            <td mat-cell *matCellDef="let sell"> {{ sell.item.itemName }} </td>
+            <td mat-cell *matCellDef="let sell">
+                <span>
+                    {{ displayMode === 'mobile' ? "Nom" : ""}} 
+                </span>
+                {{ sell.item.itemName }} 
+            </td>
         </ng-container>
 
         <ng-container matColumnDef="purchase-price">
             <th mat-header-cell arrowPosition='before' *matHeaderCellDef mat-sort-header sortActionDescription="Trier par prix d'achat / craft"> Prix d'achat / craft (k)</th>
-            <td mat-cell *matCellDef="let sell" style="text-align: right"> {{ numberWithSpaces(sell.purchasePrice) || 'NA' }}</td>
+            <td mat-cell *matCellDef="let sell" [ngStyle]="{ 'text-align': displayMode === 'mobile' ? 'left' : 'right' }"> 
+                <span>
+                    {{ displayMode === 'mobile' ? "Prix d'achat / craft (k)" : ""}} 
+                </span>
+                {{ numberWithSpaces(sell.purchasePrice) || 'NA' }}
+            </td>
         </ng-container>
 
         <ng-container matColumnDef="selling-price">
             <th mat-header-cell arrowPosition='before' *matHeaderCellDef mat-sort-header sortActionDescription="Trier par prix de vente"> Prix de vente (k)</th>
-            <td mat-cell *matCellDef="let sell" style="text-align: right"> {{ numberWithSpaces(sell.sellingPrice) || 'NA' }}</td>
+            <td mat-cell *matCellDef="let sell" [ngStyle]="{ 'text-align': displayMode === 'mobile' ? 'left' : 'right' }">
+                <span>
+                    {{ displayMode === 'mobile' ? "Prix de vente (k)" : ""}}
+                </span>
+                {{ numberWithSpaces(sell.sellingPrice) || 'NA' }}
+            </td>
         </ng-container>
 
         <ng-container matColumnDef="profit">
             <th mat-header-cell arrowPosition='before' *matHeaderCellDef mat-sort-header sortActionDescription="Trier par bénéfice"> Bénéfice (k)</th>
-            <td mat-cell *matCellDef="let sell" style="text-align: right"> {{ numberWithSpaces(sell.profit) || 'NA' }}</td>
+            <td mat-cell *matCellDef="let sell" [ngStyle]="{ 'text-align': displayMode === 'mobile' ? 'left' : 'right' }">
+                <span>
+                    {{ displayMode === 'mobile' ? "Bénéfice (k)" : ""}}
+                </span>
+                {{ numberWithSpaces(sell.profit) || 'NA' }}
+            </td>
         </ng-container>
 
         <ng-container matColumnDef="margin">
             <th mat-header-cell arrowPosition='before' *matHeaderCellDef mat-sort-header sortActionDescription="Trier par taux de marge"> Taux de marge (%)</th>
-            <td mat-cell *matCellDef="let sell" style="text-align: right"> {{ numberWithSpaces(sell.margin) || 'NA' }}</td>
+            <td mat-cell *matCellDef="let sell" [ngStyle]="{ 'text-align': displayMode === 'mobile' ? 'left' : 'right' }">
+                <span>
+                    {{ displayMode === 'mobile' ? "Taux de marge (%)" : ""}} 
+                </span>
+                {{ numberWithSpaces(sell.margin) || 'NA' }}
+            </td>
         </ng-container>
 
         <ng-container matColumnDef="sold">
             <th mat-header-cell arrowPosition='before' *matHeaderCellDef mat-sort-header sortActionDescription="Trier par status"> Vendu ?</th>
-            <td mat-cell *matCellDef="let sell" style="text-align: right">
-                <mat-icon *ngIf="sell.sold; else notSold" aria-hidden="false" aria-label="Sold">check</mat-icon>
-                <ng-template #notSold>
-                    <mat-icon aria-hidden="false" aria-label="Not sold">close</mat-icon>
-                </ng-template>
+            <td mat-cell *matCellDef="let sell" [ngStyle]="{ 'text-align': displayMode === 'mobile' ? 'left' : 'right' }">
+                <span>
+                    {{ displayMode === 'mobile' ? " Vendu ?" : ""}}
+                </span>
+                <div>
+                    <mat-icon *ngIf="sell.sold; else notSold" aria-hidden="false" aria-label="Sold">check</mat-icon>
+                    <ng-template #notSold>
+                        <mat-icon aria-hidden="false" aria-label="Not sold">close</mat-icon>
+                    </ng-template>
+                </div>
             </td>
         </ng-container>
 
         <ng-container matColumnDef="expand">
             <th mat-header-cell *matHeaderCellDef aria-label="row actions"></th>
             <td mat-cell *matCellDef="let element" style="text-align: right">
-                <button [disabled]="element != expandedElement" mat-icon-button round aria-label="edit row" (click)="openEditSellDialog(element); $event.stopPropagation()">
-                    <mat-icon *ngIf="element == expandedElement" (mouseenter)="hoverEdit = true;" (mouseleave)="hoverEdit = false" [ngClass]="hoverEdit ? 'mat-primary' : 'gray-icon'">edit</mat-icon>
-                </button>
-                <button [disabled]="element != expandedElement" mat-icon-button round aria-label="delete row" (click)="openDeleteDialog(element); $event.stopPropagation()">
-                    <mat-icon *ngIf="element == expandedElement" (mouseenter)="hoverDelete = true;" (mouseleave)="hoverDelete = false" [ngClass]="hoverDelete ? 'mat-warn' : 'gray-icon'">delete</mat-icon>
-                </button>
+                <div>    
+                    <button [disabled]="element != expandedElement && displayMode !== 'mobile'" mat-icon-button round aria-label="edit row" (click)="openEditSellDialog(element); $event.stopPropagation()">
+                        <mat-icon *ngIf="element == expandedElement || displayMode === 'mobile'" (mouseenter)="hoverEdit = true;" (mouseleave)="hoverEdit = false" [ngClass]="hoverEdit || displayMode === 'mobile' ? 'mat-primary' : 'gray-icon'">edit</mat-icon>
+                    </button>
+                    <button [disabled]="element != expandedElement && displayMode !== 'mobile'" mat-icon-button round aria-label="delete row" (click)="openDeleteDialog(element); $event.stopPropagation()">
+                        <mat-icon *ngIf="element == expandedElement || displayMode === 'mobile'" (mouseenter)="hoverDelete = true;" (mouseleave)="hoverDelete = false" [ngClass]="hoverDelete || displayMode === 'mobile' ? 'mat-warn' : 'gray-icon'">delete</mat-icon>
+                    </button>
+                </div>
             </td>
         </ng-container>
 
         <!-- Expanded Content Column -->
         <ng-container matColumnDef="expandedDetail">
-            <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithActions.length">
-                <div class="element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            <td  mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithActions.length">
+                <div *ngIf="displayMode !== 'mobile'" class="element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
                     <div class="element-comment-container">
                         <div>Commentaire : </div>
                         <div class="element-comments"> {{element.comments || 'Aucun commentaire'}} </div>
@@ -88,7 +120,7 @@
             <td class="mat-cell" [attr.colspan]="columnsToDisplayWithActions.length">Aucune donnée ne correspond à la recherche :&nbsp;"{{input.value}}"</td>
         </tr>
 
-        <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithActions;"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayMode === 'desktop' ? columnsToDisplayWithActions : [];"></tr>
         <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithActions;"
             class="element-row"
             [class.expanded-row]="expandedElement === element"
