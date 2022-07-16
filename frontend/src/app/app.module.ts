@@ -32,6 +32,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSelectModule } from '@angular/material/select';
+import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { MatSelectModule } from '@angular/material/select';
     HistoryComponent,
     HistoryTableComponent,
     SellDialogComponent,
+    DeleteDialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -10,6 +10,7 @@ import { SellDialogComponent } from '../sell-dialog/sell-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { filter } from 'rxjs/operators'
 import { SellService } from 'src/app/services/sell.service';
+import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-history-table',
@@ -65,7 +66,7 @@ export class HistoryTableComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (!!this.items && !!this.sells){
       this.sellItems = this.sellService.generateSellsWithItems(this.items, this.sells);
-      this.dataSource = new MatTableDataSource<Sell>(this.sellItems);
+      this.dataSource = new MatTableDataSource<SellItem>(this.sellItems);
       console.log(this.sells);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -204,7 +205,6 @@ export class HistoryTableComponent implements OnInit, OnChanges {
             } as Sell;
             
             this.sellService.updateSell(sell);
-            this.sellService.init();
           }
         }); 
       } else {
@@ -220,6 +220,20 @@ export class HistoryTableComponent implements OnInit, OnChanges {
         } as Sell;
         
         this.sellService.updateSell(sell);
+      }
+    });
+  }
+
+  openDeleteDialog(sellItem: SellItem): void {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      width: '250px',
+      data: {...sellItem},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('delete ? ', result);
+      if (result) {
+        this.sellService.deleteSell(sellItem);
       }
     });
   }

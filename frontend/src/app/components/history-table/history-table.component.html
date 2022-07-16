@@ -50,10 +50,10 @@
         <ng-container matColumnDef="expand">
             <th mat-header-cell *matHeaderCellDef aria-label="row actions"></th>
             <td mat-cell *matCellDef="let element" style="text-align: right">
-                <button mat-icon-button round aria-label="edit row" (click)="openEditSellDialog(element); $event.stopPropagation()">
+                <button [disabled]="element != expandedElement" mat-icon-button round aria-label="edit row" (click)="openEditSellDialog(element); $event.stopPropagation()">
                     <mat-icon *ngIf="element == expandedElement" (mouseenter)="hoverEdit = true;" (mouseleave)="hoverEdit = false" [ngClass]="hoverEdit ? 'mat-primary' : 'gray-icon'">edit</mat-icon>
                 </button>
-                <button mat-icon-button round aria-label="delete row" (click)="$event.stopPropagation()">
+                <button [disabled]="element != expandedElement" mat-icon-button round aria-label="delete row" (click)="openDeleteDialog(element); $event.stopPropagation()">
                     <mat-icon *ngIf="element == expandedElement" (mouseenter)="hoverDelete = true;" (mouseleave)="hoverDelete = false" [ngClass]="hoverDelete ? 'mat-warn' : 'gray-icon'">delete</mat-icon>
                 </button>
             </td>

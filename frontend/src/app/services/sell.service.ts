@@ -55,6 +55,19 @@ export class SellService {
     });
   }
 
+  deleteSell(sell : Sell) : void {
+    this.http
+      .delete<Sell>(URL + '/' + sell.id)
+      .subscribe({
+        next: _ => {
+            this.init();
+        },
+        error: error => {
+            console.error('Impossible de supprimer la vente!', error, sell);
+        }
+    });
+  }
+
   generateSellsWithItems(items: Item[], sells: Sell[]): SellItem[] {
     return sells.reduce((acc: SellItem[], sell: Sell) => {
       let sellItem: SellItem = {

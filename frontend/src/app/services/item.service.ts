@@ -44,23 +44,9 @@ export class ItemService {
   addItem(item : Item) {
     return this.http
       .post<Item>(URL, item).pipe(
-        tap(_ => console.log(`updated hero id=${item.id}`))
+        tap(_ => console.log(`updated item id=${item.id}`))
       );
   }
-
-  // generateSellsFromItems(items: Item[]): Sell[] {
-  //   return items.reduce((acc: Sell[], item: Item) => {
-  //     let sells = item.sells;
-  //     sells?.forEach(sell => {
-  //       let formatedItem = {...item};
-  //       formatedItem.sells = [];
-  //       sell.item = formatedItem;
-        
-  //       acc.push(sell);
-  //     });
-  //     return acc;
-  //   }, [] as Sell[]);
-  // }
 
   getAllItemsNames() : String[] {
     return this.itemStore.get('items').map(item => item.itemName);
