@@ -1,14 +1,16 @@
-import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, HostListener, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Item } from 'src/app/models/item';
-import { Sell } from 'src/app/models/sell';
+import { Sell, SellItem } from 'src/app/models/sell';
 import { ItemService } from 'src/app/services/item.service';
 import { SellDialogComponent } from '../sell-dialog/sell-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { filter } from 'rxjs/operators'
+import { SellService } from 'src/app/services/sell.service';
+import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-history-table',
@@ -25,11 +27,14 @@ import { filter } from 'rxjs/operators'
 export class HistoryTableComponent implements OnInit, OnChanges {
 
   @Input()
-  items!: Item[];
+  items!: Item[] | null;
 
-  sells!: Sell[];
+  @Input()
+  sells!: Sell[] | null;
 
-  dataSource!: MatTableDataSource<Sell>; 
+  sellItems!: SellItem[];
+
+  dataSource!: MatTableDataSource<SellItem>; 
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort: MatSort = new MatSort();
@@ -38,11 +43,14 @@ export class HistoryTableComponent implements OnInit, OnChanges {
   columnsToDisplayWithActions = [...this.columnsToDisplay, 'expand'];
 
   expandedElement: Sell | null = null;
+  hoverEdit = false;
+  hoverDelete = false;
 
   constructor(
     private itemService: ItemService,
-    public dialog: MatDialog
-  ) { }
+    private sellService: SellService,
+    public dialog: MatDialog,
+  ) {}
 
   numberWithSpaces(number : number) : String{
     var parts = number.toString().split(".");
@@ -56,13 +64,13 @@ export class HistoryTableComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['items'] && !!changes['items'].currentValue){
-      this.sells = this.itemService.generateSellsFromItems(this.items);
-      this.dataSource = new MatTableDataSource<Sell>(this.sells);
+    if (!!this.items && !!this.sells){
+      this.sellItems = this.sellService.generateSellsWithItems(this.items, this.sells);
+      this.dataSource = new MatTableDataSource<SellItem>(this.sellItems);
       console.log(this.sells);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-      this.dataSource.sortingDataAccessor = (row:Sell, columnName:string) : string | number => {
+      this.dataSource.sortingDataAccessor = (row:SellItem, columnName:string) : string | number => {
         if (columnName == "name") return row.item?.itemName || "";
         if (columnName == "purchase-price") return row.purchasePrice;
         if (columnName == "selling-price") return row.sellingPrice;
@@ -88,39 +96,145 @@ export class HistoryTableComponent implements OnInit, OnChanges {
     });
 
     dialogRef.afterClosed().pipe(filter(res => !!res)).subscribe((result) => {
-      let item: Item | undefined = this.items.find(item => item.itemName === result?.item);
+      let item: Item | undefined = this.items?.find(item => item.id === result?.item_id);
 
+      // Sell
+      const item_id = result.item_id
       const sold = result.sold
       const comments = result.comments
-      const purchasePrice = result.purchasePrice; 
-      const sellingPrice = result.sellingPrice; 
+      const purchasePrice = Number(result.purchasePrice); 
+      const sellingPrice = Number(result.sellingPrice); 
       const profit = sellingPrice - purchasePrice;
-      let margin = profit / purchasePrice * 100;
-      margin = Math.round((margin + Number.EPSILON) * 100) / 100;
-      let sell = {
-        margin,
-        profit,
-        purchasePrice,
-        sellingPrice,
-        sold,
-        comments
-      } as Sell;
+      const margin = Math.round((profit / purchasePrice * 100 + Number.EPSILON) * 100) / 100;
+      
+      if (!item) {
+        const itemName = result.item
+        const level = result.level
+        const category = result.category
+        const profession = result.profession
 
-      if (item) {
-        item.sells?.push(sell);
-        this.itemService.updateItem(item); 
+        let item = {
+          itemName,
+          level,
+          category,
+          profession
+        } as Item
+
+        this.itemService.addItem(item).subscribe(item => {
+          if (item) {
+            this.itemService.init()
+            let item_id = item.id;
+            let sell = {
+              item_id,
+              margin,
+              profit,
+              purchasePrice,
+              sellingPrice,
+              sold,
+              comments
+            } as Sell;
+            
+            this.sellService.addSell(sell);
+            this.sellService.init();
+          }
+        }); 
       } else {
-        let item: Item = {
-          itemName: result.item,
-          category: result.category,
-          profession: result.profession,
-          level: result.level,
-          sells: [] 
-        };
-        item.sells?.push(sell);
-        this.itemService.addItem(item);
+        let sell = {
+          item_id,
+          margin,
+          profit,
+          purchasePrice,
+          sellingPrice,
+          sold,
+          comments
+        } as Sell;
+        
+        this.sellService.addSell(sell);
+        this.sellService.init();
       }
     });
   }
 
+  openEditSellDialog(sellItem: SellItem): void {
+    const dialogRef = this.dialog.open(SellDialogComponent, {
+      width: '500px',
+      data: {
+        ...sellItem
+      } as SellItem,
+    });
+
+    dialogRef.afterClosed().pipe(filter(res => !!res)).subscribe((result) => {
+      let item: Item | undefined = this.items?.find(item => item.id === result?.item_id);
+
+      // Sell
+      const id = sellItem.id;
+      const item_id = result.item_id
+      const sold = result.sold
+      const comments = result.comments
+      const purchasePrice = Number(result.purchasePrice); 
+      const sellingPrice = Number(result.sellingPrice); 
+      const profit = sellingPrice - purchasePrice;
+      const margin = Math.round((profit / purchasePrice * 100 + Number.EPSILON) * 100) / 100;
+
+      if (!item) {
+        const itemName = result.item
+        const level = result.level
+        const category = result.category
+        const profession = result.profession
+
+        let item = {
+          itemName,
+          level,
+          category,
+          profession
+        } as Item
+
+        this.itemService.addItem(item).subscribe(item => {
+          if (item) {
+            this.itemService.init()
+            let item_id = item.id;
+            let sell = {
+              id,
+              item_id,
+              margin,
+              profit,
+              purchasePrice,
+              sellingPrice,
+              sold,
+              comments
+            } as Sell;
+            
+            this.sellService.updateSell(sell);
+          }
+        }); 
+      } else {
+        let sell = {
+          id,
+          item_id,
+          margin,
+          profit,
+          purchasePrice,
+          sellingPrice,
+          sold,
+          comments
+        } as Sell;
+        
+        this.sellService.updateSell(sell);
+      }
+    });
+  }
+
+  openDeleteDialog(sellItem: SellItem): void {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      width: '250px',
+      data: {...sellItem},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('delete ? ', result);
+      if (result) {
+        this.sellService.deleteSell(sellItem);
+      }
+    });
+  }
 }

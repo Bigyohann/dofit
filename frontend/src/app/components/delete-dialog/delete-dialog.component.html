@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Supprimer la vente</h1>
+<mat-dialog-content>
+    <p>Etes-vous sur de bien vouloir supprimer cette vente ?</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button color="warn" [mat-dialog-close]="false">Annuler</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="true" cdkFocusInitial>Supprimer</button>
+</mat-dialog-actions>

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs';
+import { Sell } from 'src/app/models/sell';
+import { SellStore } from 'src/app/store/sell/sell.store';
 import { Item } from '../../models/item';
 import { ItemStore } from '../../store/item/item.store';
 
@@ -12,11 +14,14 @@ import { ItemStore } from '../../store/item/item.store';
 export class HistoryComponent implements OnInit {
 
   items$: Observable<Item[]>;
+  sells$: Observable<Sell[]>;
 
   constructor(
-    private store: ItemStore
+    private itemStore: ItemStore,
+    private sellStore: SellStore
   ) {
-    this.items$ = this.store.select("items");
+    this.items$ = this.itemStore.select("items");
+    this.sells$ = this.sellStore.select("sells");
   }
 
   ngOnInit(): void {

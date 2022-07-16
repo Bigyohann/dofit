@@ -3,7 +3,7 @@
 <div class="table-filter-container">
     <mat-form-field appearance="standard">
         <mat-label>Recherche</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Cape de ..." #input>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Nom de l'objet, type de l'objet, métier, commentaire" #input>
     </mat-form-field>
     <button mat-raised-button color="primary" class="add-sell-button" (click)="openAddSellDialog()">
         Ajouter une vente
@@ -18,28 +18,28 @@
         </ng-container>
 
         <ng-container matColumnDef="purchase-price">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Trier par prix d'achat / craft"> Prix d'achat / craft (k)</th>
-            <td mat-cell *matCellDef="let sell"> {{ numberWithSpaces(sell.purchasePrice) || 'NA' }}</td>
+            <th mat-header-cell arrowPosition='before' *matHeaderCellDef mat-sort-header sortActionDescription="Trier par prix d'achat / craft"> Prix d'achat / craft (k)</th>
+            <td mat-cell *matCellDef="let sell" style="text-align: right"> {{ numberWithSpaces(sell.purchasePrice) || 'NA' }}</td>
         </ng-container>
 
         <ng-container matColumnDef="selling-price">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Trier par prix de vente"> Prix de vente (k)</th>
-            <td mat-cell *matCellDef="let sell"> {{ numberWithSpaces(sell.sellingPrice) || 'NA' }}</td>
+            <th mat-header-cell arrowPosition='before' *matHeaderCellDef mat-sort-header sortActionDescription="Trier par prix de vente"> Prix de vente (k)</th>
+            <td mat-cell *matCellDef="let sell" style="text-align: right"> {{ numberWithSpaces(sell.sellingPrice) || 'NA' }}</td>
         </ng-container>
 
         <ng-container matColumnDef="profit">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Trier par bénéfice"> Bénéfice (k)</th>
-            <td mat-cell *matCellDef="let sell"> {{ numberWithSpaces(sell.profit) || 'NA' }}</td>
+            <th mat-header-cell arrowPosition='before' *matHeaderCellDef mat-sort-header sortActionDescription="Trier par bénéfice"> Bénéfice (k)</th>
+            <td mat-cell *matCellDef="let sell" style="text-align: right"> {{ numberWithSpaces(sell.profit) || 'NA' }}</td>
         </ng-container>
 
         <ng-container matColumnDef="margin">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Trier par taux de marge"> Taux de marge (%)</th>
-            <td mat-cell *matCellDef="let sell"> {{ numberWithSpaces(sell.margin) || 'NA' }}</td>
+            <th mat-header-cell arrowPosition='before' *matHeaderCellDef mat-sort-header sortActionDescription="Trier par taux de marge"> Taux de marge (%)</th>
+            <td mat-cell *matCellDef="let sell" style="text-align: right"> {{ numberWithSpaces(sell.margin) || 'NA' }}</td>
         </ng-container>
 
         <ng-container matColumnDef="sold">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Trier par status"> Vendu ?</th>
-            <td mat-cell *matCellDef="let sell">
+            <th mat-header-cell arrowPosition='before' *matHeaderCellDef mat-sort-header sortActionDescription="Trier par status"> Vendu ?</th>
+            <td mat-cell *matCellDef="let sell" style="text-align: right">
                 <mat-icon *ngIf="sell.sold; else notSold" aria-hidden="false" aria-label="Sold">check</mat-icon>
                 <ng-template #notSold>
                     <mat-icon aria-hidden="false" aria-label="Not sold">close</mat-icon>
@@ -49,10 +49,12 @@
 
         <ng-container matColumnDef="expand">
             <th mat-header-cell *matHeaderCellDef aria-label="row actions"></th>
-            <td mat-cell *matCellDef="let element">
-                <button mat-icon-button round aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
-                <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
-                <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+            <td mat-cell *matCellDef="let element" style="text-align: right">
+                <button [disabled]="element != expandedElement" mat-icon-button round aria-label="edit row" (click)="openEditSellDialog(element); $event.stopPropagation()">
+                    <mat-icon *ngIf="element == expandedElement" (mouseenter)="hoverEdit = true;" (mouseleave)="hoverEdit = false" [ngClass]="hoverEdit ? 'mat-primary' : 'gray-icon'">edit</mat-icon>
+                </button>
+                <button [disabled]="element != expandedElement" mat-icon-button round aria-label="delete row" (click)="openDeleteDialog(element); $event.stopPropagation()">
+                    <mat-icon *ngIf="element == expandedElement" (mouseenter)="hoverDelete = true;" (mouseleave)="hoverDelete = false" [ngClass]="hoverDelete ? 'mat-warn' : 'gray-icon'">delete</mat-icon>
                 </button>
             </td>
         </ng-container>

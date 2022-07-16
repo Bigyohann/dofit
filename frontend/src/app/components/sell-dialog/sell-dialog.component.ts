@@ -1,12 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Sell } from 'src/app/models/sell';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { ItemService } from 'src/app/services/item.service';
 import { Validators } from '@angular/forms';
-import { Category, Item, Profession, ProfessionAndCategoryMap } from 'src/app/models/item';
+import { Item } from 'src/app/models/item';
+import { Sell, SellItem } from 'src/app/models/sell';
+import { Category, Profession, ProfessionAndCategoryMap } from 'src/app/models/enums';
 import { ItemStore } from 'src/app/store/item/item.store';
 
 @Component({
@@ -18,6 +18,7 @@ export class SellDialogComponent implements OnInit {
 
   sellForm = this.fb.group({
     item: ['', Validators.required],
+    item_id: [''],
     level: ['', Validators.required],
     category: ['', Validators.required],
     profession: ['', Validators.required],
@@ -26,6 +27,8 @@ export class SellDialogComponent implements OnInit {
     comments: [''],
     sold: new FormControl(false),
   });
+
+  mode: "edit" | "add";
 
   items: Item[] = [];
   filteredItems: Observable<String[]> | undefined = new Observable<String[]>();
@@ -41,20 +44,31 @@ export class SellDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<SellDialogComponent>,
-    private itemService : ItemService,
     private store: ItemStore,
     private fb: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) public data: Sell,
+    @Inject(MAT_DIALOG_DATA) public data: SellItem,
   ) {
-    this.store.select('items').subscribe(items => this.items = items);
+    if(Object.keys(data).length !== 0) {
+      this.mode = "edit";
+      this.applyObjectToForm();
+    } else {
+      this.mode = 'add';
+    }
+
+    this.store.select('items').subscribe(items => {
+      this.items = items
+      this.sellForm.get("item_id")?.setValue(data.item_id);
+    });
     this.sellForm.get("item")?.valueChanges.subscribe(itemValue => {
       const item = this.items.find(item => item.itemName == itemValue);
       this.itemAlreadyExists = !!item;
       if (item) {
+        this.sellForm.get('item_id')?.setValue(item.id);
         this.sellForm.get('level')?.setValue(item.level.toString());
         this.sellForm.get('category')?.setValue(item.category);
         this.sellForm.get('profession')?.setValue(item.profession);
       } else {
+        this.sellForm.get('item_id')?.setValue('');
         this.sellForm.get('level')?.setValue('');
         this.sellForm.get('category')?.setValue('');
         this.sellForm.get('profession')?.setValue('');
@@ -66,6 +80,18 @@ export class SellDialogComponent implements OnInit {
         if (profession) this.sellForm.get('profession')?.setValue(profession);
       }
     });
+  }
+
+  applyObjectToForm(){
+    this.sellForm.get('item')?.setValue(this.data.item?.itemName || '');
+    this.sellForm.get('item_id')?.setValue(this.data.item_id);
+    this.sellForm.get('level')?.setValue(this.data.item?.level.toString() || '');
+    this.sellForm.get('category')?.setValue(this.data.item?.category || '');
+    this.sellForm.get('profession')?.setValue(this.data.item?.profession || '');
+    this.sellForm.get('purchasePrice')?.setValue(this.data.purchasePrice.toString());
+    this.sellForm.get('sellingPrice')?.setValue(this.data.sellingPrice.toString());
+    this.sellForm.get('comments')?.setValue(this.data.comments || '');
+    this.sellForm.get('sold')?.setValue(this.data.sold);
   }
 
   onNoClick(): void {

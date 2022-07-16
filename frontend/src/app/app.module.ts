@@ -8,9 +8,11 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ItemStore } from './store/item/item.store';
+import { SellStore } from './store/sell/sell.store';
 import { LoadingStore } from './store/loading/loading.store';
 
 import { ItemService } from './services/item.service';
+import { SellService } from './services/sell.service';
 import { HttpApiInterceptor } from './interceptors/http-api.interceptor';
 
 import { HistoryComponent } from './pages/history/history.component';
@@ -30,6 +32,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSelectModule } from '@angular/material/select';
+import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +41,7 @@ import { MatSelectModule } from '@angular/material/select';
     HistoryComponent,
     HistoryTableComponent,
     SellDialogComponent,
+    DeleteDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,7 +66,9 @@ import { MatSelectModule } from '@angular/material/select';
   providers: [
     LoadingStore,
     ItemStore,
+    SellStore,
     ItemService,
+    SellService,
     {
       provide: HTTP_INTERCEPTORS,
       multi: true,

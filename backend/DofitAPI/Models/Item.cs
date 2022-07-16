@@ -21,7 +21,5 @@ namespace DofitAPI.Models
         [BsonElement("Profession")]
         public string Profession { get; set; } = null!;
 
-        [BsonElement("Sells")]
-        public Sell[]? Sells { get; set; }
     }
 }
