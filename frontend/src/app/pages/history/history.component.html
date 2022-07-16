@@ -1,3 +1,3 @@
 <h1>Suivi des ventes</h1>
 
-<app-history-table *ngIf="(items$ | async) as items" [items]="items"></app-history-table>
+<app-history-table *ngIf="(items$ | async) && (sells$ | async)" [items]="(items$ | async)" [sells]="(sells$ | async)"></app-history-table>

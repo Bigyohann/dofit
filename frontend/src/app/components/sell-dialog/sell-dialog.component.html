@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Ajouter une vente</h1>
+<h1 mat-dialog-title>{{mode == 'add' ? 'Ajouter une vente' : 'Modifier une vente'}}</h1>
 <mat-dialog-content>
     <form [formGroup]="sellForm" class="sell-form">
         <mat-grid-list cols="2" rowHeight="3:1">
@@ -107,5 +107,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button (click)="onNoClick()">Annuler</button>
-  <button mat-raised-button color="primary" [disabled]="sellForm.status != 'VALID'" [mat-dialog-close]="sellForm.value" cdkFocusInitial>Ajouter</button>
+  <button mat-raised-button color="primary" [disabled]="sellForm.status != 'VALID'" [mat-dialog-close]="sellForm.value" cdkFocusInitial>{{mode == 'add' ? 'Ajouter' : 'Modifier'}}</button>
 </mat-dialog-actions>

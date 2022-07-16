@@ -5,7 +5,6 @@ import { Item } from '../models/item';
 import { tap } from 'rxjs/operators';
 
 import { ItemStore } from '../store/item/item.store';
-import { Sell } from '../models/sell';
 
 let URL = `${environment.url}/items`
 
@@ -24,7 +23,7 @@ export class ItemService {
     this.http
       .get<Item[]>(URL)
       .pipe(
-        tap((data: Item[]) => this.itemStore.set('items', data))
+        tap((data: Item[]) => this.itemStore.set('items', data.reverse()))
       )
       .subscribe();
   }
@@ -42,32 +41,26 @@ export class ItemService {
     });
   }
 
-  addItem(item : Item) : void {
-    this.http
-      .post<Item>(URL, item)
-      .subscribe({
-        next: _ => {
-            this.init();
-        },
-        error: error => {
-            console.error('Impossible d\'ajouter l\'item!', error, item);
-        }
-    });
+  addItem(item : Item) {
+    return this.http
+      .post<Item>(URL, item).pipe(
+        tap(_ => console.log(`updated hero id=${item.id}`))
+      );
   }
 
-  generateSellsFromItems(items: Item[]): Sell[] {
-    return items.reduce((acc: Sell[], item: Item) => {
-      let sells = item.sells;
-      sells?.forEach(sell => {
-        let formatedItem = {...item};
-        formatedItem.sells = [];
-        sell.item = formatedItem;
+  // generateSellsFromItems(items: Item[]): Sell[] {
+  //   return items.reduce((acc: Sell[], item: Item) => {
+  //     let sells = item.sells;
+  //     sells?.forEach(sell => {
+  //       let formatedItem = {...item};
+  //       formatedItem.sells = [];
+  //       sell.item = formatedItem;
         
-        acc.push(sell);
-      });
-      return acc;
-    }, [] as Sell[]);
-  }
+  //       acc.push(sell);
+  //     });
+  //     return acc;
+  //   }, [] as Sell[]);
+  // }
 
   getAllItemsNames() : String[] {
     return this.itemStore.get('items').map(item => item.itemName);

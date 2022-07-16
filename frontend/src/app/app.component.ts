@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ItemService } from './services/item.service';
+import { SellService } from './services/sell.service';
 import { LoadingStore } from './store/loading/loading.store';
 
 @Component({
@@ -13,8 +14,10 @@ export class AppComponent {
   
   constructor(
     private itemService: ItemService,
+    private sellService: SellService,
     private store: LoadingStore
   ) {
     this.itemService.init();
+    this.sellService.init();
   }
 }
