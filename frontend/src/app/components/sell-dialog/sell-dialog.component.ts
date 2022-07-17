@@ -8,6 +8,7 @@ import { Item } from 'src/app/models/item';
 import { Sell, SellItem } from 'src/app/models/sell';
 import { Category, Profession, ProfessionAndCategoryMap } from 'src/app/models/enums';
 import { ItemStore } from 'src/app/store/item/item.store';
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-sell-dialog',
@@ -42,10 +43,14 @@ export class SellDialogComponent implements OnInit {
 
   itemAlreadyExists : boolean = true;
 
+  colSpan: number = 4;
+  rowSpan: string = "200px";
+
   constructor(
     public dialogRef: MatDialogRef<SellDialogComponent>,
     private store: ItemStore,
     private fb: FormBuilder,
+    private observer: BreakpointObserver,
     @Inject(MAT_DIALOG_DATA) public data: SellItem,
   ) {
     if(Object.keys(data).length !== 0) {
@@ -103,6 +108,39 @@ export class SellDialogComponent implements OnInit {
       startWith(''),
       map(value => this._filter(value || '')),
     );
+    this.observer.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small,
+      Breakpoints.Medium,
+      Breakpoints.Large,
+      Breakpoints.XLarge
+    ]).subscribe( (state: BreakpointState) => {
+      if (state.breakpoints[Breakpoints.XSmall]) {
+        console.log( 'Matches XSmall viewport');
+        this.colSpan = 1;
+        this.rowSpan = "3:1";
+      }
+      if (state.breakpoints[Breakpoints.Small]) {
+        console.log( 'Matches Small viewport');
+        this.colSpan = 2;
+        this.rowSpan = "3:1";
+      }
+      if (state.breakpoints[Breakpoints.Medium]) {
+        console.log( 'Matches Medium  viewport');
+        this.colSpan = 2;
+        this.rowSpan = "3:1";
+      }
+      if (state.breakpoints[Breakpoints.Large]) {
+        console.log( 'Matches Large viewport');
+        this.colSpan = 2;
+        this.rowSpan = "3:1";
+      }
+      if (state.breakpoints[Breakpoints.XLarge]) {
+        console.log( 'Matches XLarge viewport');
+        this.colSpan = 2;
+        this.rowSpan = "3:1";
+      }
+    });
   }
 
   private _filter(value: String): String[] {

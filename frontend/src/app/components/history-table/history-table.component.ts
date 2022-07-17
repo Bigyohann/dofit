@@ -12,6 +12,8 @@ import { filter } from 'rxjs/operators'
 import { SellService } from 'src/app/services/sell.service';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { StatsService } from 'src/app/services/stats.service';
+import { colorShades } from 'src/app/models/color-shade';
 
 @Component({
   selector: 'app-history-table',
@@ -36,6 +38,9 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
   @Input()
   search?: string;
 
+  @Input()
+  mostProfitableSellItem?: SellItem | null;
+
   @Output()
   searchBar: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -55,10 +60,12 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
 
   displayMode: 'mobile' | 'desktop' = 'desktop';
 
+  showColors = true;
 
   constructor(
     private itemService: ItemService,
     private sellService: SellService,
+    private statsService: StatsService,
     public dialog: MatDialog,
     private observer: BreakpointObserver
   ) {}
@@ -121,7 +128,7 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
 
   openAddSellDialog(): void {
     const dialogRef = this.dialog.open(SellDialogComponent, {
-      width: '500px',
+      width: this.displayMode == 'mobile' ? 'auto' : '500px',
       data: {},
     });
 
@@ -187,7 +194,7 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
 
   openEditSellDialog(sellItem: SellItem): void {
     const dialogRef = this.dialog.open(SellDialogComponent, {
-      width: '500px',
+      width: this.displayMode == 'mobile' ? 'auto' : '500px',
       data: {
         ...sellItem
       } as SellItem,
@@ -266,5 +273,12 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
         this.sellService.deleteSell(sellItem);
       }
     });
+  }
+
+  getColor(sellItem : SellItem): String | undefined {
+    let max = this.mostProfitableSellItem?.profit || 0;
+    let ratio = sellItem.profit * 100 / max;
+    ratio = Math.floor(ratio / 10) * 10;
+    return colorShades.get(ratio);
   }
 }

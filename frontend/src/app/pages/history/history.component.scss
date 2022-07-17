@@ -1,8 +1,12 @@
+mat-grid-lisf {
+    margin-bottom: 1rem;
+}
+
 mat-card {
     width: 100%;
     margin: 2rem;
 
-    mat-card-content{
+    mat-card-content {
         display: flex;
 
         .highlight {
@@ -11,5 +15,9 @@ mat-card {
             color: #673ab7;
             text-decoration: underline;
         }
+    }
+
+    mat-card-title {
+        font-weight: 600;
     }
 }

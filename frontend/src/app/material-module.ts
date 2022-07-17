@@ -15,6 +15,8 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+
 
 @NgModule({
   exports: [
@@ -34,6 +36,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     MatSidenavModule,
     MatListModule,
     MatCardModule,
+    MatSlideToggleModule
   ]
 })
 export class MaterialModule {}

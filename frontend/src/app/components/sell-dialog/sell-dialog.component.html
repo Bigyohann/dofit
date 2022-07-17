@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>{{mode == 'add' ? 'Ajouter une vente' : 'Modifier une vente'}}</h1>
 <mat-dialog-content>
     <form [formGroup]="sellForm" class="sell-form">
-        <mat-grid-list cols="2" rowHeight="3:1">
+        <mat-grid-list [cols]="colSpan" [rowHeight]="rowSpan">
             <mat-grid-tile>
                 <mat-form-field appearance="fill">
                     <mat-label>Objet</mat-label>

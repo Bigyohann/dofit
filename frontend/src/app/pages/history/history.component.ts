@@ -47,24 +47,6 @@ export class HistoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.observer.observe(['(max-width: 620px)']).subscribe((res) => {
-    //   if (res.matches) {
-    //     this.colSpan = 1;
-    //     this.rowSpan = "150px";
-    //   }
-    // });
-    // this.observer.observe(['(max-width: 900px)']).subscribe((res) => {
-    //   if (res.matches) {
-    //     this.colSpan = 2;
-    //     this.rowSpan = "150px";
-    //   }
-    // });
-    // this.observer.observe(['(min-width: 901px)']).subscribe((res) => {
-    //   if (res.matches) {
-    //     this.colSpan = 4;
-    //     this.rowSpan = "200px";
-    //   }
-    // });
     this.observer.observe([
       Breakpoints.XSmall,
       Breakpoints.Small,

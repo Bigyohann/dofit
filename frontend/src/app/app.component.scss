@@ -14,4 +14,24 @@ mat-sidenav {
     padding: 16px;
     text-align: center;
 
+    .router-link-button {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: start;
+
+        .triangle {
+            position: relative;
+            left: 82px;
+            height: 0;
+            margin: 0;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            border-right: 12px solid red;
+        }
+
+        mat-icon {
+            margin-right: 0.3rem;
+        }
+    }
 }
