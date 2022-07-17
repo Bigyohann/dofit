@@ -1,3 +1,51 @@
 <h1>Suivi des ventes</h1>
-
-<app-history-table *ngIf="(items$ | async) && (sells$ | async)" [items]="(items$ | async)" [sells]="(sells$ | async)"></app-history-table>
+<mat-grid-list [cols]="colSpan" [rowHeight]="rowSpan">
+    <mat-grid-tile>
+        <mat-card>
+            <mat-card-subtitle>Bénéfice estimé</mat-card-subtitle>
+            <mat-card-title *ngIf="profitFromSells$ | async as profitFromSells">{{ numberWithSpaces(profitFromSells) }} k</mat-card-title>
+            <mat-card-content>
+                <p>si tout vendu</p>
+            </mat-card-content>
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-card *ngIf="mostProfitableSellItem$ | async as mostProfitableSellItem">
+            <mat-card-subtitle>Meilleur bénéfice</mat-card-subtitle>
+            <mat-card-title>{{ numberWithSpaces(mostProfitableSellItem.profit) }} k</mat-card-title>
+            <mat-card-content>
+                <div>{{(mostProfitableSellItem$ | async)?.item?.itemName}}</div>
+                <div *ngIf="!searchProfit" class="highlight" (click)="seeSellItem(mostProfitableSellItem, 'profit')">(voir)</div>
+                <div *ngIf="searchProfit" class="highlight" (click)="searchProfit = undefined">(reset)</div>
+            </mat-card-content>
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-card *ngIf="mostMargableSellItem$ | async as mostMargableSellItem">
+            <mat-card-subtitle>Meilleur Taux de marge</mat-card-subtitle>
+            <mat-card-title>{{ numberWithSpaces(mostMargableSellItem.margin)}} %</mat-card-title>
+            <mat-card-content>
+                <div>{{(mostMargableSellItem$ | async)?.item?.itemName}}</div>
+                <div *ngIf="!searchMargin" class="highlight" (click)="seeSellItem(mostMargableSellItem, 'margin')">(voir)</div>
+                <div *ngIf="searchMargin" class="highlight" (click)="searchMargin = undefined">(reset)</div>
+            </mat-card-content>
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-card *ngIf="bestRateSellItem$ | async as bestRateSellItem">
+            <mat-card-subtitle>Meilleur rapport marge/bénéfice</mat-card-subtitle>
+            <mat-card-title>{{ numberWithSpaces(bestRateSellItem.profit / bestRateSellItem.margin) }}</mat-card-title>
+            <mat-card-content>
+                <div>{{bestRateSellItem.item?.itemName}}</div>
+                <span *ngIf="!searchRate" class="highlight" (click)="seeSellItem(bestRateSellItem, 'rate')">(voir)</span>
+                <span *ngIf="searchRate" class="highlight" (click)="searchRate = undefined">(reset)</span>
+            </mat-card-content>
+        </mat-card>
+    </mat-grid-tile>
+</mat-grid-list>
+<app-history-table 
+    *ngIf="(items$ | async) && (sells$ | async)" 
+    [items]="(items$ | async)" [sells]="(sells$ | async)" 
+    [search]="searchMargin || searchProfit || searchRate"
+    (searchBar)="resetSeeItems()">
+</app-history-table>

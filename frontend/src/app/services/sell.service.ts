@@ -4,8 +4,9 @@ import { environment } from 'src/environments/environment';
 import { Sell, SellItem } from '../models/sell';
 import { tap } from 'rxjs/operators';
 
-import { SellStore } from '../store/sell/sell.store';
 import { Item } from '../models/item';
+import { SellStore } from '../store/sell/sell.store';
+import { ItemStore } from '../store/item/item.store';
 
 let URL = `${environment.url}/sells`
 
@@ -16,6 +17,7 @@ export class SellService {
 
   constructor(
     private sellStore: SellStore,
+    private itemStore: ItemStore,
     private http: HttpClient
   ) { }
 
@@ -66,6 +68,14 @@ export class SellService {
             console.error('Impossible de supprimer la vente!', error, sell);
         }
     });
+  }
+
+  getSellItemFromSell(sell: Sell): SellItem {
+    let sellItem: SellItem = {
+      ...sell,
+      item: this.itemStore.get('items').find(item => item.id === sell.item_id)
+    }
+    return sellItem;
   }
 
   generateSellsWithItems(items: Item[], sells: Sell[]): SellItem[] {

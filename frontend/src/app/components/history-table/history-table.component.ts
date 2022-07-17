@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, HostListener, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -33,6 +33,12 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
   @Input()
   sells!: Sell[] | null;
 
+  @Input()
+  search?: string;
+
+  @Output()
+  searchBar: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   sellItems!: SellItem[];
 
   dataSource!: MatTableDataSource<SellItem>; 
@@ -48,6 +54,7 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
   hoverDelete = false;
 
   displayMode: 'mobile' | 'desktop' = 'desktop';
+
 
   constructor(
     private itemService: ItemService,
@@ -65,6 +72,7 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.toLowerCase();
+    this.searchBar.emit(true);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -85,7 +93,15 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
         return (sell.item?.itemName.toLowerCase().includes(filter) || false)
         || (sell.item?.profession.toLowerCase().includes(filter) || false)
         || (sell.item?.category.toLowerCase().includes(filter) || false)
-        || (sell.comments?.toLowerCase().includes(filter) || false);
+        || (sell.comments?.toLowerCase().includes(filter) || false)
+        || (sell.id?.toLowerCase().includes(filter) || false);
+      }
+    } 
+    if (changes['search']) {
+      if (!!changes['search'].currentValue) {
+        this.dataSource.filter = changes['search'].currentValue.toLowerCase();
+      } else {
+        this.dataSource.filter = '';
       }
     }
   }
