@@ -50,6 +50,9 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort: MatSort = new MatSort();
+  
+  manualFilter = '';
+  filterDirection: 'asc' | 'desc' = 'asc';
 
   columnsToDisplay = ['name', 'purchase-price', 'selling-price', 'profit', 'margin', 'sold'];
   columnsToDisplayWithActions = [...this.columnsToDisplay, 'expand'];
@@ -82,6 +85,16 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
     this.searchBar.emit(true);
   }
 
+  applySort(id: string,  start?: 'asc' | 'desc') {
+    console.log('ask to apply', id, start)
+    this.filterDirection = start ? start : this.filterDirection == 'asc' ? 'desc' : 'asc';
+    const matSort = this.dataSource.sort;
+
+    matSort?.sort({id: id, start: this.filterDirection, disableClear: true});
+
+    this.dataSource.sort = matSort;
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (!!this.items && !!this.sells){
       this.sellItems = this.sellService.generateSellsWithItems(this.items, this.sells);
@@ -90,6 +103,7 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.dataSource.sortingDataAccessor = (row:SellItem, columnName:string) : string | number => {
+        this.manualFilter = columnName;
         if (columnName == "name") return row.item?.itemName || "";
         if (columnName == "purchase-price") return row.purchasePrice;
         if (columnName == "selling-price") return row.sellingPrice;
@@ -119,9 +133,11 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
   ngAfterContentInit() {
     this.observer.observe(['(max-width: 620px)']).subscribe((res) => {
       if (res.matches) {
-        this.displayMode = 'mobile'
+        this.displayMode = 'mobile';
+        this.showColors = false;
       } else {
         this.displayMode = 'desktop';
+        this.showColors = true;
       }
     });
   }

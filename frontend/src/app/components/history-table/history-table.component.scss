@@ -20,6 +20,33 @@ h3 {
     }
 }
 
+.table-header-row {
+    display: flex;
+    flex-direction: column;
+
+    .header-colors{
+        margin: 1rem 1rem;
+    }
+
+    .header-sort {
+        display: grid;
+        grid-template-columns: auto auto auto;
+        grid-template-rows: 30px;
+
+        mat-radio-button {
+            height: 100%;
+            margin-left: 1rem;
+            margin-top: 0.5rem;
+
+            ::ng-deep .mat-radio-label-content {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+    }
+}
+
 .sells-table {
     width: 100%;
     padding: 0 2rem;
@@ -81,7 +108,7 @@ h3 {
   
     .mat-table .mat-row {
         margin-bottom: 2rem;
-        border-bottom: 2px solid #ddd;
+        // border-bottom: 2px solid #ddd;
         display: flex;
         flex-direction: column;
         align-items: start;
@@ -91,7 +118,8 @@ h3 {
     .mat-table .mat-cell {
         border-bottom: 1px solid #ddd;
         display: flex;
-        flex-direction: column;
+        justify-content: space-between;
+        width: calc(100vw - 4rem);
         font-size: 1.2em;
         height: auto;
         margin-bottom: 4%;
