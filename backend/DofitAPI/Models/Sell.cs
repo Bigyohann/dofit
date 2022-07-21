@@ -8,7 +8,8 @@ namespace DofitAPI.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
-
+        
+        [BsonElement("Item_id")]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Item_id { get; set; }
 
