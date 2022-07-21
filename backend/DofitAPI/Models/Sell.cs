@@ -9,7 +9,6 @@ namespace DofitAPI.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
 
-        [BsonElement("Item_id")]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Item_id { get; set; }
 
@@ -30,5 +29,13 @@ namespace DofitAPI.Models
 
         [BsonElement("Comments")]
         public string? Comments { get; set; }
+
+        [BsonElement("ListingDate")]
+        [BsonDateTimeOptions(DateOnly = true)]
+        public DateTime ListingDate { get; set; }
+
+        [BsonElement("SellingDate")]
+        [BsonDateTimeOptions(DateOnly = true)]
+        public DateTime SellingDate { get; set; }
     }
 }
