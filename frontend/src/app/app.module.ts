@@ -24,8 +24,7 @@ import { HistoryTableComponent } from './components/history-table/history-table.
 import { SellDialogComponent } from './components/sell-dialog/sell-dialog.component';
 import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
-
-
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -57,7 +56,8 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
       provide: HTTP_INTERCEPTORS,
       multi: true,
       useClass: HttpApiInterceptor,
-    }
+    },
+    {provide: MAT_DATE_LOCALE, useValue: 'fr-FR'}
   ],
   bootstrap: [AppComponent]
 })

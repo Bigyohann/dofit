@@ -86,7 +86,6 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
   }
 
   applySort(id: string,  start?: 'asc' | 'desc') {
-    console.log('ask to apply', id, start)
     this.filterDirection = start ? start : this.filterDirection == 'asc' ? 'desc' : 'asc';
     const matSort = this.dataSource.sort;
 
@@ -99,7 +98,6 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
     if (!!this.items && !!this.sells){
       this.sellItems = this.sellService.generateSellsWithItems(this.items, this.sells);
       this.dataSource = new MatTableDataSource<SellItem>(this.sellItems);
-      console.log(this.sells);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.dataSource.sortingDataAccessor = (row:SellItem, columnName:string) : string | number => {
@@ -144,7 +142,7 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
 
   openAddSellDialog(): void {
     const dialogRef = this.dialog.open(SellDialogComponent, {
-      width: this.displayMode == 'mobile' ? 'auto' : '500px',
+      width: this.displayMode == 'mobile' ? 'auto' : '600px',
       data: {},
     });
 
@@ -152,6 +150,13 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
       let item: Item | undefined = this.items?.find(item => item.id === result?.item_id);
 
       // Sell
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const listingDateTime = result.listingDate;
+      listingDateTime.setHours(0,0,0,0);
+      const sellingDateTime = result.sellingDate;
+      sellingDateTime.setHours(0,0,0,0);
+      
       const item_id = result.item_id
       const sold = result.sold
       const comments = result.comments
@@ -159,6 +164,10 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
       const sellingPrice = Number(result.sellingPrice); 
       const profit = sellingPrice - purchasePrice;
       const margin = Math.round((profit / purchasePrice * 100 + Number.EPSILON) * 100) / 100;
+      const listingDate = listingDateTime.toISOString() || today.toISOString();
+      const sellingDate = sold ? sellingDateTime.toISOString() || today.toISOString() : null;
+
+      console.log(listingDate, sellingDate)
       
       if (!item) {
         const itemName = result.item
@@ -184,9 +193,11 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
               purchasePrice,
               sellingPrice,
               sold,
-              comments
+              comments,
+              listingDate,
+              sellingDate
             } as Sell;
-            
+
             this.sellService.addSell(sell);
             this.sellService.init();
           }
@@ -199,7 +210,9 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
           purchasePrice,
           sellingPrice,
           sold,
-          comments
+          comments,
+          listingDate,
+          sellingDate
         } as Sell;
         
         this.sellService.addSell(sell);
@@ -210,7 +223,7 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
 
   openEditSellDialog(sellItem: SellItem): void {
     const dialogRef = this.dialog.open(SellDialogComponent, {
-      width: this.displayMode == 'mobile' ? 'auto' : '500px',
+      width: this.displayMode == 'mobile' ? 'auto' : '600px',
       data: {
         ...sellItem
       } as SellItem,
@@ -220,6 +233,13 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
       let item: Item | undefined = this.items?.find(item => item.id === result?.item_id);
 
       // Sell
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const listingDateTime = result.listingDate;
+      listingDateTime?.setHours(0,0,0,0);
+      const sellingDateTime = result.sellingDate;
+      sellingDateTime?.setHours(0,0,0,0);
+
       const id = sellItem.id;
       const item_id = result.item_id
       const sold = result.sold
@@ -227,7 +247,19 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
       const purchasePrice = Number(result.purchasePrice); 
       const sellingPrice = Number(result.sellingPrice); 
       const profit = sellingPrice - purchasePrice;
-      const margin = Math.round((profit / purchasePrice * 100 + Number.EPSILON) * 100) / 100;
+      const margin = Math.round((profit / purchasePrice * 100 + Number.EPSILON) * 100) / 100
+      const listingDate = result.listingDate ? listingDateTime.toISOString() : sellItem.listingDate;
+      // const sellingDate = sold ? 
+      //                       listingDateTime.toISOString() || (!sellItem.sold ? 
+      //                       today.toISOString() : 
+      //                       sellItem.sellingDate)
+      //                     : null;
+      const sellingDate = !sold ? 
+                          null : 
+                          (!!result.sellingDate ? 
+                            result.sellingDate.toISOString() :
+                            today.toISOString()
+                          )                    
 
       if (!item) {
         const itemName = result.item
@@ -254,7 +286,9 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
               purchasePrice,
               sellingPrice,
               sold,
-              comments
+              comments,
+              listingDate,
+              sellingDate
             } as Sell;
             
             this.sellService.updateSell(sell);
@@ -269,9 +303,12 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
           purchasePrice,
           sellingPrice,
           sold,
-          comments
+          comments,
+          listingDate,
+          sellingDate
         } as Sell;
         
+        console.log(sell)
         this.sellService.updateSell(sell);
       }
     });
@@ -284,7 +321,6 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('delete ? ', result);
       if (result) {
         this.sellService.deleteSell(sellItem);
       }

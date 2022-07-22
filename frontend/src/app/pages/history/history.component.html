@@ -3,7 +3,7 @@
     <mat-grid-tile>
         <mat-card>
             <mat-card-subtitle>Bénéfice estimé</mat-card-subtitle>
-            <mat-card-title class="primary" *ngIf="profitFromSells$ | async as profitFromSells">{{ numberWithSpaces(profitFromSells) }} k</mat-card-title>
+            <mat-card-title class="primary" *ngIf="profitFromSells$ | async as profitFromSells">{{ !!profitFromSells ? numberWithSpaces(profitFromSells) : 0 }} k</mat-card-title>
             <mat-card-content>
                 <p>si tout vendu</p>
             </mat-card-content>
@@ -12,7 +12,7 @@
     <mat-grid-tile>
         <mat-card *ngIf="mostProfitableSellItem$ | async as mostProfitableSellItem">
             <mat-card-subtitle>Meilleur bénéfice</mat-card-subtitle>
-            <mat-card-title class="primary">{{ numberWithSpaces(mostProfitableSellItem.profit) }} k</mat-card-title>
+            <mat-card-title class="primary">{{ !!mostProfitableSellItem.profit ? numberWithSpaces(mostProfitableSellItem.profit) : 0}} k</mat-card-title>
             <mat-card-content>
                 <div>{{(mostProfitableSellItem$ | async)?.item?.itemName}}</div>
                 <div *ngIf="!searchProfit" class="highlight" (click)="seeSellItem(mostProfitableSellItem, 'profit')">(voir)</div>
@@ -23,7 +23,7 @@
     <mat-grid-tile>
         <mat-card *ngIf="mostMargableSellItem$ | async as mostMargableSellItem">
             <mat-card-subtitle>Meilleur taux de marge</mat-card-subtitle>
-            <mat-card-title class="primary">{{ numberWithSpaces(mostMargableSellItem.margin)}} %</mat-card-title>
+            <mat-card-title class="primary">{{ mostMargableSellItem.margin ? numberWithSpaces(mostMargableSellItem.margin) : 0}} %</mat-card-title>
             <mat-card-content>
                 <div>{{(mostMargableSellItem$ | async)?.item?.itemName}}</div>
                 <div *ngIf="!searchMargin" class="highlight" (click)="seeSellItem(mostMargableSellItem, 'margin')">(voir)</div>
@@ -34,7 +34,7 @@
     <mat-grid-tile>
         <mat-card *ngIf="bestRateSellItem$ | async as bestRateSellItem">
             <mat-card-subtitle>Meilleur rapport marge/bénéfice</mat-card-subtitle>
-            <mat-card-title class="primary">{{ numberWithSpaces(bestRateSellItem.profit / bestRateSellItem.margin) }}</mat-card-title>
+            <mat-card-title class="primary">{{ !!bestRateSellItem.profit && !!bestRateSellItem.margin ? numberWithSpaces(bestRateSellItem.profit / bestRateSellItem.margin) : 0}}</mat-card-title>
             <mat-card-content>
                 <div>{{bestRateSellItem.item?.itemName}}</div>
                 <span *ngIf="!searchRate" class="highlight" (click)="seeSellItem(bestRateSellItem, 'rate')">(voir)</span>

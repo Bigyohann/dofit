@@ -198,13 +198,22 @@
                         <div>Niveau : </div>
                         <div class="element-level"> {{element.item.level}} </div>
                     </div>
+                    <div class="element-listing-date-container">
+                        <div>Date de mise en vente : </div>
+                        <div class="element-listing-date"> {{element.listingDate?.toLocaleDateString() || 'Aucune'}} </div>
+                    </div>
+                    <div class="element-selling-date-container">
+                        <div>Date de vente : </div>
+                        <div class="element-selling-date"> {{element.sellingDate?.toLocaleDateString() || 'Aucune'}} </div>
+                    </div>
                 </div>
             </td>
         </ng-container>
 
         <!-- Row shown when there is no matching data. -->
         <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell" [attr.colspan]="columnsToDisplayWithActions.length">Aucune donnée ne correspond à la recherche :&nbsp;"{{input.value}}"</td>
+            <td class="mat-cell" *ngIf="sells?.length !== 0" [attr.colspan]="columnsToDisplayWithActions.length">Aucune donnée ne correspond à la recherche :&nbsp;"{{input.value}}"</td>
+            <td class="mat-cell" *ngIf="sells?.length === 0" [attr.colspan]="columnsToDisplayWithActions.length">Aucune donnée à afficher. Utilisez le bouton "Ajouter une vente" pour commencer</td>
         </tr>
 
         <tr mat-header-row *matHeaderRowDef="displayMode === 'desktop' ? columnsToDisplayWithActions : [];"></tr>

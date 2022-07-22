@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBuilder, FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { AbstractControl, FormBuilder, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { Validators } from '@angular/forms';
 import { Item } from 'src/app/models/item';
@@ -27,9 +27,13 @@ export class SellDialogComponent implements OnInit {
     sellingPrice: ['', Validators.required],
     comments: [''],
     sold: new FormControl(false),
+    listingDate: new FormControl<Date|null>(null),
+    sellingDate: new FormControl<Date|null>(null),
   });
 
   mode: "edit" | "add";
+
+  minDate$: BehaviorSubject<Date | null> = new BehaviorSubject<Date | null>(null);
 
   items: Item[] = [];
   filteredItems: Observable<String[]> | undefined = new Observable<String[]>();
@@ -58,6 +62,8 @@ export class SellDialogComponent implements OnInit {
       this.applyObjectToForm();
     } else {
       this.mode = 'add';
+      this.sellForm.get('listingDate')?.setValue(new Date());
+      this.minDate$.next(new Date());
     }
 
     this.store.select('items').subscribe(items => {
@@ -97,6 +103,9 @@ export class SellDialogComponent implements OnInit {
     this.sellForm.get('sellingPrice')?.setValue(this.data.sellingPrice.toString());
     this.sellForm.get('comments')?.setValue(this.data.comments || '');
     this.sellForm.get('sold')?.setValue(this.data.sold);
+    this.sellForm.get('listingDate')?.setValue((this.data.listingDate as Date));
+    this.sellForm.get('sellingDate')?.setValue((this.data.sellingDate as Date));
+    this.minDate$.next(this.data.listingDate as Date);
   }
 
   onNoClick(): void {
@@ -107,6 +116,10 @@ export class SellDialogComponent implements OnInit {
     this.filteredItems = this.sellForm.get("item")?.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value || '')),
+    );
+    this.sellForm.get("sold")?.valueChanges.subscribe(value => value === false ? 
+                                                                this.sellForm.controls.sellingDate.setValue(null) : 
+                                                                this.sellForm.controls.sellingDate.setValue(new Date)
     );
     this.observer.observe([
       Breakpoints.XSmall,

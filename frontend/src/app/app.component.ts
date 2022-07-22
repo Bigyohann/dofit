@@ -16,6 +16,11 @@ export class AppComponent implements AfterContentInit {
   loading$ = this.store.select('loading');
   showSidenav = false;
   modeSidenav = new FormControl('over' as MatDrawerMode);
+
+  routes = [
+    {route:'/dashboard', icon: 'home', selected: false, label: "Dashboard"},
+    {route:'/history', icon: 'dvr', selected: true, label: "Historique des ventes"},
+  ]
   
   constructor(
     private itemService: ItemService,
@@ -25,6 +30,17 @@ export class AppComponent implements AfterContentInit {
   ) {
     this.itemService.init();
     this.sellService.init();
+  }
+
+  updateSelectedRoutes(selectedRoute: string) {
+    this.routes.forEach(route => {
+      if (selectedRoute === route.route) {
+        route.selected = true; 
+      } 
+      else {
+        route.selected = false;
+      }
+    })
   }
 
   ngAfterContentInit() {

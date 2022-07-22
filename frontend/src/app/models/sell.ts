@@ -9,6 +9,8 @@ export interface Sell {
     margin: number;
     comments?: string;
     item_id: string;
+    listingDate?: Date | string;
+    sellingDate?: Date | string;
 }
 
 export interface SellItem extends Sell {

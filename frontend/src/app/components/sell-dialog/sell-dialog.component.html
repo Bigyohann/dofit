@@ -99,6 +99,24 @@
                 </mat-form-field>
             </mat-grid-tile>
             <mat-grid-tile>
+                <mat-form-field appearance="fill">
+                    <mat-label>Date de mise en vente</mat-label>
+                    <input matInput [matDatepicker]="listingDatePicker" formControlName="listingDate" (dateChange)="minDate$.next($event.value)">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matSuffix [for]="listingDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #listingDatePicker></mat-datepicker>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="fill">
+                    <mat-label>Date de la vente</mat-label>
+                    <input matInput [min]="minDate$ | async" [matDatepicker]="sellingDatePicker" formControlName="sellingDate">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matSuffix [for]="sellingDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #sellingDatePicker></mat-datepicker>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
                 <mat-checkbox
                     color="primary"
                     formControlName="sold"

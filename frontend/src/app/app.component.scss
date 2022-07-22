@@ -11,7 +11,7 @@ mat-sidenav {
     width: auto;
     border-right: none;
     color: white;
-    padding: 16px;
+    padding: 1rem;
     text-align: center;
 
     .router-link-button {
@@ -19,19 +19,20 @@ mat-sidenav {
         flex-direction: row;
         align-items: center;
         justify-content: start;
+        width: 100%;
 
         .triangle {
-            position: relative;
-            left: 82px;
+            position: absolute;
+            right: 0;
             height: 0;
             margin: 0;
             border-top: 12px solid transparent;
             border-bottom: 12px solid transparent;
-            border-right: 12px solid red;
+            border-right: 12px solid #673ab7;
         }
 
         mat-icon {
-            margin-right: 0.3rem;
+            margin-right: 0.5rem;
         }
     }
 }

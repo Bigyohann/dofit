@@ -32,11 +32,11 @@ namespace DofitAPI.Models
         public string? Comments { get; set; }
 
         [BsonElement("ListingDate")]
-        [BsonDateTimeOptions(DateOnly = true)]
-        public DateTime ListingDate { get; set; }
+        [BsonDateTimeOptions(DateOnly = false)]
+        public DateTime? ListingDate { get; set; }
 
         [BsonElement("SellingDate")]
-        [BsonDateTimeOptions(DateOnly = true)]
-        public DateTime SellingDate { get; set; }
+        [BsonDateTimeOptions(DateOnly = false)]
+        public DateTime? SellingDate { get; set; }
     }
 }

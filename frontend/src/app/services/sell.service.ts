@@ -26,6 +26,8 @@ export class SellService {
     this.http
       .get<Sell[]>(URL)
       .pipe(
+        tap((sells: Sell[]) => sells.forEach(sell => {if (!!sell.listingDate) sell.listingDate = new Date(sell.listingDate)})),
+        tap((sells: Sell[]) => sells.forEach(sell => {if (!!sell.sellingDate) sell.sellingDate  = new Date(sell.sellingDate)})),
         tap((data: Sell[]) => this.sellStore.set('sells', data.reverse()))
       )
       .subscribe();
