@@ -1,9 +1,9 @@
 version: "3.7"
 
 services:
-  dofitFront:
+  dofitfront:
     build:
-      dockerfile: .
+      dockerfile: ./Dockerfile
     image: hub.yohannbiglia.fr/armando-project/front:latest
     restart: always
     networks:
@@ -12,10 +12,10 @@ services:
       - ./docker/prod/app/nginx:/etc/nginx
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${ROUTER_NAME}.rule=Host(dofit.yohannbiglia.fr)
-      - traefik.http.routers.${ROUTER_NAME}.entrypoints=websecure
-      - traefik.http.routers.${ROUTER_NAME}.tls=true
-      - traefik.http.routers.${ROUTER_NAME}.tls.certresolver=letsencrypt
+      - traefik.http.routers.dofitfront.rule=Host(dofit.yohannbiglia.fr)
+      - traefik.http.routers.dofitfront.entrypoints=websecure
+      - traefik.http.routers.dofitfront.tls=true
+      - traefik.http.routers.dofitfront.tls.certresolver=letsencrypt
 
 networks:
   traefik-proxy:

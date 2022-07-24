@@ -1,4 +1,4 @@
-FROM node:12.14-alpine AS build
+FROM node:18-alpine AS build
 # Create a Virtual directory inside the docker image
 WORKDIR /dist/src/app
 # Copy files to virtual directory
@@ -8,7 +8,7 @@ RUN npm cache clean --force
 # Copy files from local machine to virtual directory in docker image
 COPY . .
 RUN npm install
-RUN npm run build:prod
+RUN npm run build
 
 
 ### STAGE 2:RUN ###
