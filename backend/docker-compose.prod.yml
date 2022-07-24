@@ -22,6 +22,7 @@ services:
       - itemsdb
     networks:
       - db-dofit
+      - traefik-proxy
     labels:
       - traefik.enable=true
       - traefik.http.routers.dofitapi.rule=Host(`${DOFIT_URL}`) && PathPrefix(`${APIPATH}{regex:$$|/.*}`)
@@ -29,7 +30,9 @@ services:
       - traefik.http.routers.dofitapi.tls=true
       - traefik.http.routers.dofitapi.tls.certresolver=letsencrypt
       - traefik.http.routers.dofitapi.middlewares=dofitapi
+      - traefik.http.routers.dofitapi.service=dofitapiservice
       - traefik.http.middlewares.dofitapi.stripprefix.prefixes=/api
+      - traefik.http.services.dofitapiservice.loadbalancer.server.port=8080
 
 networks:
   db-dofit:
