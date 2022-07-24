@@ -10,7 +10,7 @@ services:
       - ./docker/prod/app/nginx:/etc/nginx
     labels:
       - traefik.enable=true
-      - traefik.http.routers.dofitfront.rule=Host(dofit.yohannbiglia.fr)
+      - traefik.http.routers.dofitfront.rule=Host(`dofit.yohannbiglia.fr`)
       - traefik.http.routers.dofitfront.entrypoints=websecure
       - traefik.http.routers.dofitfront.tls=true
       - traefik.http.routers.dofitfront.tls.certresolver=letsencrypt
