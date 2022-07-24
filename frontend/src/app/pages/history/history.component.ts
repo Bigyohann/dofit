@@ -34,7 +34,6 @@ export class HistoryComponent implements OnInit {
   constructor(
     private itemStore: ItemStore,
     private sellStore: SellStore,
-    private sellService: SellService,
     private statsService: StatsService,
     private observer: BreakpointObserver
   ) {

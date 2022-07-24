@@ -18,8 +18,8 @@ export class AppComponent implements AfterContentInit {
   modeSidenav = new FormControl('over' as MatDrawerMode);
 
   routes = [
-    {route:'/dashboard', icon: 'home', selected: false, label: "Dashboard"},
     {route:'/history', icon: 'dvr', selected: true, label: "Historique des ventes"},
+    {route:'/stats', icon: 'trending_up', selected: false, label: "Statistiques"},
   ]
   
   constructor(

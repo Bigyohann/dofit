@@ -3,7 +3,8 @@
     <mat-grid-tile>
         <mat-card>
             <mat-card-subtitle>Bénéfice estimé</mat-card-subtitle>
-            <mat-card-title class="primary" *ngIf="profitFromSells$ | async as profitFromSells">{{ !!profitFromSells ? numberWithSpaces(profitFromSells) : 0 }} k</mat-card-title>
+            <mat-card-title class="primary" *ngIf="profitFromSells$ | async as profitFromSells">{{ numberWithSpaces(profitFromSells)}} k</mat-card-title>
+            <mat-card-title class="primary" *ngIf="(profitFromSells$ | async) === 0">0 k</mat-card-title>
             <mat-card-content>
                 <p>si tout vendu</p>
             </mat-card-content>
@@ -34,7 +35,7 @@
     <mat-grid-tile>
         <mat-card *ngIf="bestRateSellItem$ | async as bestRateSellItem">
             <mat-card-subtitle>Meilleur rapport marge/bénéfice</mat-card-subtitle>
-            <mat-card-title class="primary">{{ !!bestRateSellItem.profit && !!bestRateSellItem.margin ? numberWithSpaces(bestRateSellItem.profit / bestRateSellItem.margin) : 0}}</mat-card-title>
+            <mat-card-title class="primary">{{ !!bestRateSellItem.profit && !!bestRateSellItem.margin ? numberWithSpaces(bestRateSellItem.profit * bestRateSellItem.margin) : 0}}</mat-card-title>
             <mat-card-content>
                 <div>{{bestRateSellItem.item?.itemName}}</div>
                 <span *ngIf="!searchRate" class="highlight" (click)="seeSellItem(bestRateSellItem, 'rate')">(voir)</span>

@@ -25,6 +25,7 @@ import { SellDialogComponent } from './components/sell-dialog/sell-dialog.compon
 import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialModule
+    MaterialModule,
+    NgChartsModule
   ],
   providers: [
     LoadingStore,

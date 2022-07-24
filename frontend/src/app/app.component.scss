@@ -20,6 +20,12 @@ mat-sidenav {
         align-items: center;
         justify-content: start;
         width: 100%;
+        color: gray;
+
+        &.selected {
+            color: #673ab7;
+            font-weight: 500;
+        }
 
         .triangle {
             position: absolute;

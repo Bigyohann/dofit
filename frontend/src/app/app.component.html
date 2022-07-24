@@ -13,13 +13,13 @@
             <a mat-list-item 
             *ngFor="let item of routes"
             class="router-link-button" 
+            [ngClass]="{'selected': item.selected}"
             [routerLink]="item.route" 
             (click)="showSidenav = false; updateSelectedRoutes(item.route)"> 
                 <mat-icon>{{item.icon}}</mat-icon>
                 <div class="button-label">
                     {{item.label}} 
                 </div>
-                <!-- <div *ngIf="item.selected" class="triangle"></div> -->
             </a>
         </mat-nav-list>
     </mat-sidenav>
