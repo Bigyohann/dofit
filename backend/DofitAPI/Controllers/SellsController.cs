@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DofitAPI.Controllers
 {
     [ApiController]
-    [Route("api/sells")]
+    [Route("sells")]
     public class SellsController : ControllerBase
     {
         private readonly SellsService _sellsService;
