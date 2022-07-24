@@ -2,8 +2,6 @@ version: "3.7"
 
 services:
   dofitfront:
-    build:
-      dockerfile: ./Dockerfile
     image: hub.yohannbiglia.fr/armando-project/front:latest
     restart: always
     networks:
