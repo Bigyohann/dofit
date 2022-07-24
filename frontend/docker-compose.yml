@@ -7,7 +7,7 @@ services:
     networks:
       - traefik-proxy
     volumes:
-      - ./docker/prod/app/nginx:/etc/nginx
+      - ./docker/prod/app:/etc/nginx
     labels:
       - traefik.enable=true
       - traefik.http.routers.dofitfront.rule=Host(`dofit.yohannbiglia.fr`)
