@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+
+  itemsdb:
+    image: mongo
+  
+  dofitapi:
+    image: ${DOCKER_REGISTRY-}dofitapi
+    build:
+      context: .
+      dockerfile: DofitAPI/Dockerfile
