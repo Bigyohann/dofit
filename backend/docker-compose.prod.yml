@@ -1,0 +1,38 @@
+version: '3.4'
+
+services:
+
+  itemsdb:
+    container_name: itemsdb
+    restart: always
+    volumes:
+      - ./database_mongo:/var/opt/mongo/data
+    networks:
+      - db-dofit
+
+  dofitapi:
+    image: hub.yohannbiglia.fr/armando-project/back:latest
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    depends_on:
+      - itemsdb
+    networks:
+      - db-dofit
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dofitapi.rule=Host(`${DOFIT_URL}`) && PathPrefix(`${APIPATH}{regex:$$|/.*}`)
+      - traefik.http.routers.dofitapi.entrypoints=websecure
+      - traefik.http.routers.dofitapi.tls=true
+      - traefik.http.routers.dofitapi.tls.certresolver=letsencrypt
+      - traefik.http.routers.dofitapi.middlewares=dofitapi
+      - traefik.http.middlewares.dofitapi.stripprefix.prefixes=/api
+
+networks:
+  db-dofit:
+    name: "db-dofit"
+  traefik-proxy:
+    name: "traefik-proxy"
