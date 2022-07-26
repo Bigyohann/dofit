@@ -1,4 +1,4 @@
-<h1>Dashboard</h1>
+<h1>Statistiques</h1>
 <mat-grid-list cols="4" rowHeight="2:1">
     <mat-grid-tile>
         <mat-card>
@@ -87,6 +87,34 @@
                 [type]="'pie'"
                 [data]="professionChartData"
                 [options]="pieChartOptions"
+                [legend]="lineChartLegend">
+                </canvas>
+            </mat-card-content>
+        </mat-card>
+    </mat-grid-tile>
+</mat-grid-list>
+<mat-grid-list cols="2" rowHeight="2:1">
+    <mat-grid-tile>
+        <mat-card>
+            <mat-card-subtitle>Moyenne Marge / Bénéfice</mat-card-subtitle>
+            <mat-card-content>
+                <canvas baseChart style="width: 250px; max-height: 250px; margin: 1rem"
+                [type]="'polarArea'"
+                [data]="marginLevelChartData"
+                [options]="polarAreaChartOptions"
+                [legend]="lineChartLegend">
+                </canvas>
+            </mat-card-content>
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-card>
+            <mat-card-subtitle>Métier / Bénéfice</mat-card-subtitle>
+            <mat-card-content>
+                <canvas baseChart style="width: 250px; max-height: 250px; margin: 1rem"
+                [type]="'polarArea'"
+                [data]="profitProfessionChartData"
+                [options]="polarAreaChartOptions"
                 [legend]="lineChartLegend">
                 </canvas>
             </mat-card-content>

@@ -34,8 +34,8 @@
     </mat-grid-tile>
     <mat-grid-tile>
         <mat-card *ngIf="bestRateSellItem$ | async as bestRateSellItem">
-            <mat-card-subtitle>Meilleur rapport marge/bénéfice</mat-card-subtitle>
-            <mat-card-title class="primary">{{ !!bestRateSellItem.profit && !!bestRateSellItem.margin ? numberWithSpaces(bestRateSellItem.profit * bestRateSellItem.margin) : 0}}</mat-card-title>
+            <mat-card-subtitle>Meilleur rapport marge/temps de vente</mat-card-subtitle>
+            <mat-card-title class="primary">{{ !!bestRateSellItem ? generateBestRateSellLabel(bestRateSellItem) : 0}}</mat-card-title>
             <mat-card-content>
                 <div>{{bestRateSellItem.item?.itemName}}</div>
                 <span *ngIf="!searchRate" class="highlight" (click)="seeSellItem(bestRateSellItem, 'rate')">(voir)</span>

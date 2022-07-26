@@ -46,8 +46,8 @@
                                 aria-label="Category"
                                 matInput
                                 formControlName="category">
-                        <mat-option *ngFor="let category of filteredCategories | keyvalue" [value]="category.value">
-                            {{category.value}}
+                        <mat-option *ngFor="let category of filteredCategories" [value]="category">
+                            {{category}}
                         </mat-option>
                     </mat-select>
                     <mat-hint align="end" *ngIf="itemAlreadyExists">Autocomplété</mat-hint>
@@ -69,8 +69,8 @@
                                 aria-label="Profession"
                                 matInput
                                 formControlName="profession">
-                        <mat-option *ngFor="let profession of filteredProfessions | keyvalue" [value]="profession.value">
-                            {{profession.value}}
+                        <mat-option *ngFor="let profession of filteredProfessions" [value]="profession">
+                            {{profession}}
                         </mat-option>
                     </mat-select>
                     <mat-hint align="end" *ngIf="itemAlreadyExists">Autocomplété</mat-hint>
@@ -110,7 +110,7 @@
             <mat-grid-tile>
                 <mat-form-field appearance="fill">
                     <mat-label>Date de la vente</mat-label>
-                    <input matInput [min]="minDate$ | async" [matDatepicker]="sellingDatePicker" formControlName="sellingDate">
+                    <input matInput #input [min]="minDate$ | async" [matDatepicker]="sellingDatePicker" formControlName="sellingDate">
                     <mat-hint>MM/DD/YYYY</mat-hint>
                     <mat-datepicker-toggle matSuffix [for]="sellingDatePicker"></mat-datepicker-toggle>
                     <mat-datepicker #sellingDatePicker></mat-datepicker>
