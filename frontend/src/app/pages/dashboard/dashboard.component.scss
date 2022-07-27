@@ -4,6 +4,7 @@ mat-card {
 
     mat-card-content {
         display: flex;
+        margin: 0;
 
         .highlight {
             cursor: pointer; 

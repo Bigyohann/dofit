@@ -1,14 +1,15 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AbstractControl, FormBuilder, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { Validators } from '@angular/forms';
 import { Item } from 'src/app/models/item';
-import { Sell, SellItem } from 'src/app/models/sell';
+import { SellItem } from 'src/app/models/sell';
 import { Category, Profession, ProfessionAndCategoryMap } from 'src/app/models/enums';
 import { ItemStore } from 'src/app/store/item/item.store';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
+import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-sell-dialog',
@@ -16,6 +17,9 @@ import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/l
   styleUrls: ['./sell-dialog.component.scss']
 })
 export class SellDialogComponent implements OnInit {
+
+  @ViewChild('input', { read: MatInput })
+  input!: MatInput;
 
   sellForm = this.fb.group({
     item: ['', Validators.required],
@@ -42,8 +46,8 @@ export class SellDialogComponent implements OnInit {
   categories = Category;
   professionAndCategoryMap = ProfessionAndCategoryMap;
 
-  filteredProfessions = Object.values(this.professions);
-  filteredCategories = Object.values(this.categories);
+  filteredProfessions = Object.values(this.professions).sort((a,b) => a.toLocaleLowerCase().trim() > b.toLocaleLowerCase().trim() ? 1 : -1);
+  filteredCategories = Object.values(this.categories).sort((a,b) => a.toLocaleLowerCase().trim() > b.toLocaleLowerCase().trim() ? 1 : -1);
 
   itemAlreadyExists : boolean = true;
 
@@ -117,10 +121,16 @@ export class SellDialogComponent implements OnInit {
       startWith(''),
       map(value => this._filter(value || '')),
     );
-    this.sellForm.get("sold")?.valueChanges.subscribe(value => value === false ? 
-                                                                this.sellForm.controls.sellingDate.setValue(null) : 
-                                                                this.sellForm.controls.sellingDate.setValue(new Date)
-    );
+    this.sellForm.get("sold")?.valueChanges.subscribe(setSold => {
+      if (!this.sellForm.controls.sellingDate.value) {
+        if (setSold) {
+          this.sellForm.controls.sellingDate.setValue(new Date);
+        } else {
+          this.input.value = null;
+          this.sellForm.controls.sellingDate.setValue(null);
+        }
+      }
+    });
     this.observer.observe([
       Breakpoints.XSmall,
       Breakpoints.Small,

@@ -23,6 +23,9 @@ export class DashboardComponent implements OnInit {
   levelSpreadingGraphData$: Observable<any>;
   professionSpreadingGraphData$: Observable<any>;
 
+  marginLevelGraphData$: Observable<any>;
+  profitProfessionGraphData$: Observable<any>;
+
   public turnoverChartData: ChartConfiguration<'line'>['data'] = {
     labels: [],
     datasets: [
@@ -68,7 +71,26 @@ export class DashboardComponent implements OnInit {
       {
         data: [],
         label: 'Métier',
-        // backgroundColor: 'rgba(103,58,183,0.3)'
+      }
+    ]
+  };
+
+  public profitProfessionChartData: ChartConfiguration<'polarArea'>['data'] = {
+    labels: [],
+    datasets: [
+      {
+        data: [],
+        label: 'Rentabilité des métiers',
+      }
+    ]
+  };
+
+  public marginLevelChartData: ChartConfiguration<'polarArea'>['data'] = {
+    labels: [],
+    datasets: [
+      {
+        data: [],
+        label: 'Moyenne des marges par niveau',
       }
     ]
   };
@@ -78,6 +100,15 @@ export class DashboardComponent implements OnInit {
   };
 
   public pieChartOptions: ChartOptions<'pie'> = {
+    responsive: true,
+    plugins : {
+      legend: {
+        position: 'left'
+      }
+    }
+  };
+
+  public polarAreaChartOptions: ChartOptions<'polarArea'> = {
     responsive: true,
     plugins : {
       legend: {
@@ -118,7 +149,6 @@ export class DashboardComponent implements OnInit {
 
     this.levelSpreadingGraphData$ = this.statsService.getLevelSpreadingGraphData();
     this.levelSpreadingGraphData$.subscribe(chartData => {
-      console.log('chartData', chartData);
       this.levelChartData.labels = chartData.map((data: BarChartData) => data.range.label);
       this.levelChartData.datasets[0].data = chartData.map((data: BarChartData) => data.value);
       this.charts?.forEach((child) => {
@@ -128,7 +158,6 @@ export class DashboardComponent implements OnInit {
 
     this.professionSpreadingGraphData$ = this.statsService.getProfessionSpreadingGraphData();
     this.professionSpreadingGraphData$.subscribe(chartData => {
-      console.log('chartData', chartData);
       this.professionChartData.labels = chartData.map((data: PieChartData) => data.label);
       this.professionChartData.datasets[0].data = chartData.map((data: PieChartData) => data.value);
       this.charts?.forEach((child) => {
@@ -136,6 +165,24 @@ export class DashboardComponent implements OnInit {
       });
     });
 
+    this.profitProfessionGraphData$ = this.statsService.getProfitByProfessionGraphData();
+    this.profitProfessionGraphData$.subscribe(chartData => {
+      this.profitProfessionChartData.labels = chartData.map((data: PieChartData) => data.label);
+      this.profitProfessionChartData.datasets[0].data = chartData.map((data: PieChartData) => data.value);
+      this.charts?.forEach((child) => {
+        child.chart?.update()
+      });
+    });
+
+    this.marginLevelGraphData$ = this.statsService.getMarginByLevelGraphData();
+    this.marginLevelGraphData$.subscribe(chartData => {
+      console.log(chartData)
+      this.marginLevelChartData.labels = chartData.map((data: PieChartData) => data.label);
+      this.marginLevelChartData.datasets[0].data = chartData.map((data: PieChartData) => data.value);
+      this.charts?.forEach((child) => {
+        child.chart?.update()
+      });
+    });
   }
   
   ngOnInit(): void { 

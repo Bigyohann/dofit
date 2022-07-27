@@ -12,7 +12,7 @@
 </div>
 <div class="mat-elevation-z4">
     <div class="table-header-row">
-        <mat-slide-toggle *ngIf="displayMode == 'mobile'" color="primary" class="header-colors" [(ngModel)]="showColors">
+        <mat-slide-toggle color="primary" class="header-colors" [(ngModel)]="showColors">
             Afficher la coloration
         </mat-slide-toggle>
         
@@ -230,10 +230,6 @@
                  showFirstLastButtons 
                  aria-label="Sélectionner une page">
     </mat-paginator>
-
-    <mat-slide-toggle *ngIf="displayMode != 'mobile'" color="primary" style="margin: 1rem 1rem;" [(ngModel)]="showColors">
-        Afficher la coloration
-    </mat-slide-toggle>
 </div>
 
 

@@ -2,6 +2,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { AfterContentInit, Component, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDrawerMode, MatSidenav } from '@angular/material/sidenav';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ItemService } from './services/item.service';
 import { SellService } from './services/sell.service';
 import { LoadingStore } from './store/loading/loading.store';
@@ -26,10 +27,13 @@ export class AppComponent implements AfterContentInit {
     private itemService: ItemService,
     private sellService: SellService,
     private store: LoadingStore,
-    private observer: BreakpointObserver
+    private observer: BreakpointObserver,
+    private route: ActivatedRoute
   ) {
     this.itemService.init();
     this.sellService.init();
+    const path = window.location.pathname
+    this.updateSelectedRoutes('/' + path.split('/')[path.split('/').length - 1] || '/history');
   }
 
   updateSelectedRoutes(selectedRoute: string) {

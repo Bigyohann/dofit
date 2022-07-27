@@ -76,7 +76,7 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
   numberWithSpaces(number : number) : String{
     var parts = number.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-    return parts.join(".");
+    return parts[0];
   }
   
   applyFilter(event: Event) {
@@ -96,6 +96,7 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
 
   ngOnChanges(changes: SimpleChanges): void {
     if (!!this.items && !!this.sells){
+      console.log("ng on changes uodate sells")
       this.sellItems = this.sellService.generateSellsWithItems(this.items, this.sells);
       this.dataSource = new MatTableDataSource<SellItem>(this.sellItems);
       this.dataSource.paginator = this.paginator;
@@ -153,9 +154,9 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
       const today = new Date();
       today.setHours(0,0,0,0);
       const listingDateTime = result.listingDate;
-      listingDateTime.setHours(0,0,0,0);
+      listingDateTime?.setHours(0,0,0,0);
       const sellingDateTime = result.sellingDate;
-      sellingDateTime.setHours(0,0,0,0);
+      sellingDateTime?.setHours(0,0,0,0);
       
       const item_id = result.item_id
       const sold = result.sold
@@ -166,8 +167,6 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
       const margin = Math.round((profit / purchasePrice * 100 + Number.EPSILON) * 100) / 100;
       const listingDate = listingDateTime.toISOString() || today.toISOString();
       const sellingDate = sold ? sellingDateTime.toISOString() || today.toISOString() : null;
-
-      console.log(listingDate, sellingDate)
       
       if (!item) {
         const itemName = result.item
@@ -249,11 +248,6 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
       const profit = sellingPrice - purchasePrice;
       const margin = Math.round((profit / purchasePrice * 100 + Number.EPSILON) * 100) / 100
       const listingDate = result.listingDate ? listingDateTime.toISOString() : sellItem.listingDate;
-      // const sellingDate = sold ? 
-      //                       listingDateTime.toISOString() || (!sellItem.sold ? 
-      //                       today.toISOString() : 
-      //                       sellItem.sellingDate)
-      //                     : null;
       const sellingDate = !sold ? 
                           null : 
                           (!!result.sellingDate ? 
@@ -308,7 +302,6 @@ export class HistoryTableComponent implements OnInit, AfterContentInit, OnChange
           sellingDate
         } as Sell;
         
-        console.log(sell)
         this.sellService.updateSell(sell);
       }
     });

@@ -107,6 +107,12 @@ export class HistoryComponent implements OnInit {
     this.searchMargin = undefined;
   }
 
+  generateBestRateSellLabel(sellItem: SellItem) {
+    let differenceSell = (sellItem.listingDate && sellItem.sellingDate) && (sellItem.sellingDate as Date).getTime() - (sellItem.listingDate as Date).getTime();
+    let totalDaysSell = Math.round(differenceSell as number / (1000 * 3600 * 24) * 100) / 100;
+    return this.numberWithSpaces(sellItem.profit / (totalDaysSell + 1)) + " kamas / jour";
+  }
+
   numberWithSpaces(number : number) : String{
     number = Math.round((number + Number.EPSILON) * 100) / 100;
     var parts = number.toString().split(".");
