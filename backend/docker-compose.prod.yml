@@ -11,13 +11,10 @@ services:
       - db-dofit
 
   dofitapi:
-    image: hub.yohannbiglia.fr/armando-project/back:latest
+    image: hub.yohannbiglia.fr/armando-project/back:1.0.1
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:8080
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
     depends_on:
       - itemsdb
     networks:

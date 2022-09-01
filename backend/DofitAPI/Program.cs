@@ -28,6 +28,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+if (app.Environment.IsProduction())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.RoutePrefix = "api";
+        c.SwaggerEndpoint("/swagger.json", "DofitAPI");
+    });
+}
+
 
 app.UseCors("corsapp");
 app.UseHttpsRedirection();
