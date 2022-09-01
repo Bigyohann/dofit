@@ -11,7 +11,7 @@ services:
       - db-dofit
 
   dofitapi:
-    image: hub.yohannbiglia.fr/armando-project/back:1.0.1
+    image: hub.yohannbiglia.fr/armando-project/back:latest
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:8080
