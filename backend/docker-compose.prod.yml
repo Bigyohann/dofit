@@ -6,7 +6,7 @@ services:
     container_name: itemsdb
     restart: always
     volumes:
-      - ./database_mongo:/var/opt/mongo/data
+      - ./database_mongo:/data/db
     networks:
       - db-dofit
 
