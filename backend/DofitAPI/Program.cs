@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options => { options.DocumentFilter<PathPrefixInsertDocumentFilter>("api"); });
+builder.Services.AddSwaggerGen(options => { options.DocumentFilter<PathPrefixInsertDocumentFilter>("/api"); });
 
 builder.Services.Configure<DofitDatabaseSettings>(builder.Configuration.GetSection("DofitDatabase"));
 builder.Services.AddSingleton<ItemsService>();
